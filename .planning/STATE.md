@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 02-02 plan
-last_updated: "2026-05-14T19:11:17.441Z"
-last_activity: 2026-05-14 -- Completed 02-03 plan (Enable and run practical non-hardware tests)
+status: ready_to_plan
+stopped_at: Phase 3 context gathered
+last_updated: "2026-05-14T21:35:00.000Z"
+last_activity: 2026-05-14 -- Phase 3 context gathered (Raspberry Pi Portability)
 progress:
   total_phases: 8
   completed_phases: 2
   total_plans: 6
   completed_plans: 6
-  percent: 100
+  percent: 25
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-14)
 
 **Core value:** Existing 433 MHz devices controlled by a TellStick Duo must keep working on modern Linux, using the existing configuration file, without re-learning or re-pairing devices.
-**Current focus:** Phase 2: Arch Native Build
+**Current focus:** Phase 3: Raspberry Pi Portability
 
 ## Current Position
 
-Phase: 2
-Plan: 3
-Status: Complete
-Last activity: 2026-05-14 -- Completed 02-03 plan (Enable and run practical non-hardware tests)
+Phase: 3
+Plan: Not started
+Status: Context gathered, ready to plan
+Last activity: 2026-05-14 -- Phase 3 context gathered (Raspberry Pi Portability)
 
-Progress: [██████████] 100%
+Progress: [██░░░░░░░░] 25%
 
 ## Performance Metrics
 
@@ -69,6 +69,12 @@ Recent decisions affecting current work:
 - 02-02: Enforced global compiler flags (-Wall -Wextra -Wconversion -Wsign-conversion -Werror=deprecated-declarations -Werror=return-type) in CMakeLists.txt
 - 02-03: Tests compiled and passed without modification, confirming 02-02 warning fixes maintained test compatibility
 - 02-03: Preserved ADD_SOURCES function and cpplint_filters in tests/CMakeLists.txt for future re-enablement of style checks
+- 03-context: Use Docker multi-arch build (`docker buildx --platform linux/arm64`) for aarch64 verification
+- 03-context: Base image is `debian:bookworm-slim`
+- 03-context: Container must compile, run CppUnit tests, and smoke-test `tdtool`
+- 03-context: Create `scripts/install-debian-deps.sh` with full apt dependency list
+- 03-context: Reuse existing `headless` CMake preset (architecture-agnostic)
+- 03-context: Build-and-observe only for architecture audit; fix issues if build fails
 
 ### Pending Todos
 
@@ -91,6 +97,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-14T19:10:19Z
-Stopped at: Completed 02-03 plan
-Resume file: .planning/phases/02-arch-native-build/02-03-SUMMARY.md
+Last session: 2026-05-14T21:35:00Z
+Stopped at: Phase 3 context gathered
+Resume file: .planning/phases/03-raspberry-pi-portability/03-CONTEXT.md
