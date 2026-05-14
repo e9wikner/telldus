@@ -56,9 +56,14 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: Install/confirm Arch build dependencies and run initial configure/build
-- [ ] 02-02: Fix modern compiler and dependency breakages in headless components
-- [ ] 02-03: Enable and run practical non-hardware tests
+**Wave 1**
+- [ ] 02-01-PLAN.md — Install/confirm Arch build dependencies and run initial configure/build
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 02-02-PLAN.md — Fix modern compiler and dependency breakages in headless components
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [ ] 02-03-PLAN.md — Enable and run practical non-hardware tests
 
 ### Phase 3: Raspberry Pi Portability
 **Goal**: The same headless build path works for Raspberry Pi OS/Debian `aarch64`.
