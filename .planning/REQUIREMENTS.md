@@ -9,7 +9,7 @@ Requirements for the initial release. Each maps to roadmap phases.
 
 ### Native Linux Build
 
-- [ ] **NBLD-01**: Developer can configure the headless Telldus Core build on Arch Linux without requiring TelldusCenter or Qt GUI dependencies
+- [x] **NBLD-01**: Developer can configure the headless Telldus Core build on Arch Linux without requiring TelldusCenter or Qt GUI dependencies
 - [ ] **NBLD-02**: Developer can build `telldusd`, `libtelldus-core`, and `tdtool` on Arch Linux using documented system dependencies
 - [ ] **NBLD-03**: Developer can configure and build the same headless components for Raspberry Pi OS/Debian `aarch64`
 - [ ] **NBLD-04**: Developer can run automated core tests that are practical on modern Linux without requiring TellStick hardware
@@ -86,7 +86,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NBLD-01 | Phase 1 | Pending |
+| NBLD-01 | Phase 1 | Complete |
 | NBLD-02 | Phase 2 | Pending |
 | NBLD-03 | Phase 3 | Pending |
 | NBLD-04 | Phase 2 | Pending |
@@ -119,4 +119,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-05-14*
-*Last updated: 2026-05-14 after roadmap creation*
+*Last updated: 2026-05-14 after Phase 1 completion*

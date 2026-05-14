@@ -12,7 +12,7 @@ This roadmap restores Telldus Core as a modern Linux headless runtime before add
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Headless Build Boundary** - Separate the Linux headless target from GUI and legacy platform assumptions
+- [x] **Phase 1: Headless Build Boundary** - Separate the Linux headless target from GUI and legacy platform assumptions (completed 2026-05-14)
 - [ ] **Phase 2: Arch Native Build** - Build and test the headless components on the local Arch Linux machine
 - [ ] **Phase 3: Raspberry Pi Portability** - Prove the same headless build path for Debian/Raspberry Pi `aarch64`
 - [ ] **Phase 4: Config Compatibility** - Preserve existing `tellstick.conf` behavior and state separation
@@ -36,13 +36,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 **Wave 1**
-- [ ] 01-01: Audit current CMake options and dependency coupling
+- [x] 01-01: Audit current CMake options and dependency coupling
 
 **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 01-02: Add or adjust headless Linux build configuration
+- [x] 01-02: Add or adjust headless Linux build configuration
 
 **Wave 3** *(blocked on Wave 2 completion)*
-- [ ] 01-03: Verify GUI-free configuration excludes TelldusCenter and Qt dependencies
+- [x] 01-03: Verify GUI-free configuration excludes TelldusCenter and Qt dependencies
 
 ### Phase 2: Arch Native Build
 **Goal**: The headless runtime builds and core tests run on the local Arch Linux development machine.
