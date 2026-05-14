@@ -48,7 +48,7 @@ Current build controls observed in `telldus-core/CMakeLists.txt` and subdirector
 - `FORCE_COMPILE_FROM_TRUNK=TRUE` is required to configure from this source tree.
 - `BUILD_TDTOOL` controls whether `telldus-core/tdtool` is added.
 - `BUILD_TDADMIN` controls whether `telldus-core/tdadmin` is added; the current Linux default is `TRUE`.
-- `BUILD_LIBTELLDUS-CORE` exists, but `telldus-core/client` is currently added unconditionally.
+- `BUILD_LIBTELLDUS-CORE` controls whether `telldus-core/client` is added. `BUILD_TDTOOL=TRUE` and `ENABLE_TESTING=TRUE` require it because both need the client library target.
 - `ENABLE_TESTING` is defined in `telldus-core/tests/CMakeLists.txt` and defaults to `FALSE`.
 - `FTDI_ENGINE` defaults to `libftdi` on Linux and selects either `TellStick_libftdi.cpp` or `TellStick_ftd2xx.cpp`.
 - `GENERATE_MAN` and `GENERATE_DOXYGEN` are optional documentation/manpage controls.
@@ -62,11 +62,11 @@ Current target names:
 
 ## Known Boundary Risks
 
-- `telldus-core/CMakeLists.txt` unconditionally adds `common`, `service`, `client`, and `tests`, so the target boundary is only partly expressed through options.
-- `BUILD_LIBTELLDUS-CORE` is declared but not honored by the current top-level CMake file.
+- `telldus-core/CMakeLists.txt` unconditionally adds `common`, `service`, and `tests`; `client`, `tdtool`, and `tdadmin` are option-controlled.
+- `BUILD_LIBTELLDUS-CORE=FALSE` is outside the Phase 1 proof command because the boundary includes the `telldus-core` client library and `tdtool`.
 - `BUILD_TDADMIN` defaults to `TRUE` on Linux; Phase 1 proof commands should pass `-DBUILD_TDADMIN=FALSE` to avoid admin tooling in the headless proof.
-- `FIND_PACKAGE(SignTool REQUIRED)` appears in `service` and `client`, even though signing is effectively a non-Windows no-op through `FindSignTool.cmake`.
-- `tdtool` links to `${CMAKE_BINARY_DIR}/client/libtelldus-core.so` on Unix instead of linking directly to the CMake target variable.
+- `SignTool` is required only on Windows. Linux still loads `FindSignTool.cmake` so `SIGN()` remains defined as a no-op.
+- `tdtool` links through `${telldus-core_TARGET}` so the target graph stays explicit.
 - `ENABLE_TESTING=TRUE` depends on `TelldusServiceStatic`, CppUnit, Python, and cppcheck, so test-boundary configure/build can expose extra issues that belong mainly to Phase 2 unless they block target selection.
 - This boundary intentionally does not validate the TellStick Duo, `/etc/tellstick.conf` runtime compatibility, Docker USB passthrough, MQTT, or Home Assistant integration.
 

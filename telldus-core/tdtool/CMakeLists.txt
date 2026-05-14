@@ -39,7 +39,7 @@ ELSEIF (APPLE)
 	)
 ELSE (WIN32)
 	TARGET_LINK_LIBRARIES(tdtool
-		${CMAKE_BINARY_DIR}/client/libtelldus-core.so
+		${telldus-core_TARGET}
 	)
 ENDIF (WIN32)
 

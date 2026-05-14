@@ -2,7 +2,11 @@ IF(COMMAND cmake_policy)
 	cmake_policy(SET CMP0003 NEW)
 ENDIF(COMMAND cmake_policy)
 
-FIND_PACKAGE( SignTool REQUIRED )
+IF(WIN32)
+	FIND_PACKAGE( SignTool REQUIRED )
+ELSE(WIN32)
+	FIND_PACKAGE( SignTool )
+ENDIF(WIN32)
 
 ######## Non configurable options  ########
 SET( telldus-core_SRCS
@@ -128,4 +132,3 @@ IF (UNIX)
 		PUBLIC_HEADER   DESTINATION   include
 	)
 ENDIF (UNIX)
-

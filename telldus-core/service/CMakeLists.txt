@@ -2,7 +2,11 @@ IF(COMMAND cmake_policy)
 	CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND cmake_policy)
 
-FIND_PACKAGE( SignTool REQUIRED )
+IF(WIN32)
+	FIND_PACKAGE( SignTool REQUIRED )
+ELSE(WIN32)
+	FIND_PACKAGE( SignTool )
+ENDIF(WIN32)
 
 SET (telldusd_DESCRIPTION
 	"background service for Telldus TellStick, must be running to control TellStick"
