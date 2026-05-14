@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Headless Build Boundary** - Separate the Linux headless target from GUI and legacy platform assumptions (completed 2026-05-14)
 - [x] **Phase 2: Arch Native Build** - Build and test the headless components on the local Arch Linux machine (completed 2026-05-14)
-- [ ] **Phase 3: Raspberry Pi Portability** - Prove the same headless build path for Debian/Raspberry Pi `aarch64`
+- [x] **Phase 3: Raspberry Pi Portability** - Prove the same headless build path for Debian/Raspberry Pi `aarch64` (completed 2026-05-14)
 - [ ] **Phase 4: Config Compatibility** - Preserve existing `tellstick.conf` behavior and state separation
 - [ ] **Phase 5: Docker Image and Config Mount** - Build a minimal container image with `/etc/tellstick.conf` bind-mount support
 - [ ] **Phase 6: Containerized Daemon Runtime** - Run `telldusd` and `tdtool` in Docker with restart-safe behavior
@@ -79,7 +79,7 @@ Plans:
 Plans:
 - [x] 03-01: Create or select a Debian/Raspberry Pi `aarch64` build environment
 - [x] 03-02: Build the headless components for the Raspberry Pi target
-- [ ] 03-03: Resolve portability issues and confirm matching artifacts
+- [x] 03-03: Resolve portability issues and confirm matching artifacts (completed 2026-05-14)
 
 ### Phase 4: Config Compatibility
 **Goal**: Existing `tellstick.conf` files remain usable without changing paired 433 MHz devices.
@@ -173,7 +173,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 |-------|----------------|--------|-----------|
 | 1. Headless Build Boundary | 3/3 | Complete | 2026-05-14 |
 | 2. Arch Native Build | 3/3 | Complete | 2026-05-14 |
-| 3. Raspberry Pi Portability | 0/3 | Not started | - |
+| 3. Raspberry Pi Portability | 3/3 | Complete | 2026-05-14 |
 | 4. Config Compatibility | 0/3 | Not started | - |
 | 5. Docker Image and Config Mount | 0/3 | Not started | - |
 | 6. Containerized Daemon Runtime | 0/4 | Not started | - |
