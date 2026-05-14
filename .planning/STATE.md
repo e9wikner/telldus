@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
+status: executing
 stopped_at: Phase 1 context gathered
-last_updated: "2026-05-14T18:20:15.997Z"
-last_activity: 2026-05-14 -- Phase 01 complete; ready to plan Phase 2
+last_updated: "2026-05-14T19:04:36.356Z"
+last_activity: 2026-05-14 -- Completed 02-01 plan (Arch build environment and initial error catalog)
 progress:
   total_phases: 8
   completed_phases: 1
   total_plans: 6
-  completed_plans: 4
-  percent: 67
+  completed_plans: 5
+  percent: 83
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-05-14)
 ## Current Position
 
 Phase: 2
-Plan: 1
+Plan: 2
 Status: In Progress
-Last activity: 2026-05-14 -- Completed 02-01 plan (Arch build environment and initial error catalog)
+Last activity: 2026-05-14 -- Completed 02-02 plan (Compiler warning fixes and clean build)
 
 Progress: [███████░░░] 67%
 
@@ -36,21 +36,21 @@ Progress: [███████░░░] 67%
 
 **Velocity:**
 
-- Total plans completed: 4
-- Average duration: 36 min
-- Total execution time: 0.6 hours
+- Total plans completed: 5
+- Average duration: 40 min
+- Total execution time: 1.5 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 3 | 3 | - |
-| 02 | 1 | 3 | 36 min |
+| 02 | 2 | 3 | 45 min |
 
 **Recent Trend:**
 
-- Last 5 plans: 02-01 (36 min)
-- Trend: First plan in Phase 2
+- Last 5 plans: 02-01 (36 min), 02-02 (54 min)
+- Trend: Second plan in Phase 2
 
 *Updated after each plan completion*
 
@@ -65,6 +65,8 @@ Recent decisions affecting current work:
 - Initialization: Exclude TelldusCenter/Qt GUI, Windows, macOS, and FreeBSD from v1.
 - Initialization: Support both native Linux and Docker runtime/test workflows.
 - Initialization: Preserve existing `tellstick.conf` and avoid device re-learning.
+- 02-02: Expanded warning fix scope from 5 planned files to 25 files to satisfy zero-warning acceptance criteria
+- 02-02: Enforced global compiler flags (-Wall -Wextra -Wconversion -Wsign-conversion -Werror=deprecated-declarations -Werror=return-type) in CMakeLists.txt
 
 ### Pending Todos
 
@@ -87,6 +89,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-14T15:46:26.603Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-headless-build-boundary/01-CONTEXT.md
+Last session: 2026-05-14T21:29:00.000Z
+Stopped at: Completed 02-02 plan
+Resume file: .planning/phases/02-arch-native-build/02-02-SUMMARY.md
