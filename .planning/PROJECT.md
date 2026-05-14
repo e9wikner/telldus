@@ -20,6 +20,7 @@ Existing 433 MHz devices controlled by a TellStick Duo must keep working on mode
 - ✓ The codebase already includes protocol implementations for many 433 MHz devices and sensors — existing
 - ✓ The codebase already exposes callbacks/events for devices, raw device data, sensors, and controllers — existing
 - ✓ The codebase includes optional tests for common utilities and protocol behavior — existing
+- ✓ Phase 1 established a Linux headless build boundary for `telldusd`, `telldus-core`, and `tdtool` without requiring TelldusCenter/Qt in the core CMake files — validated 2026-05-14
 
 ### Active
 
@@ -74,8 +75,8 @@ Docker is not just a packaging nicety. It is a test and runtime strategy: the co
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Target headless Linux first | The needed deployment is Raspberry Pi/Home Assistant, and TelldusCenter is not required | — Pending |
-| Exclude TelldusCenter/Qt GUI from v1 | Qt 4 GUI modernization would distract from restoring working TellStick Duo runtime | — Pending |
+| Target headless Linux first | The needed deployment is Raspberry Pi/Home Assistant, and TelldusCenter is not required | Phase 1 established the headless build boundary |
+| Exclude TelldusCenter/Qt GUI from v1 | Qt 4 GUI modernization would distract from restoring working TellStick Duo runtime | Phase 1 kept GUI/Qt outside the core headless CMake path |
 | Preserve existing `tellstick.conf` | Existing 433 MHz devices are already paired around the house and should keep working | — Pending |
 | Support both Docker and native Linux | Docker gives reproducible Raspberry Pi-like testing/runtime, while native support keeps local and direct deployment viable | — Pending |
 | Defer MQTT/Home Assistant integration | Core compile/runtime must be stable before replacing the old `tdtool`-based control surface | — Pending |
@@ -98,4 +99,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-14 after initialization*
+*Last updated: 2026-05-14 after Phase 1 completion*
