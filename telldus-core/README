@@ -27,4 +27,40 @@ Have a look in the man page for a description how to use it:
 
 	man tdtool
 
+HEADLESS LINUX BUILD
+
+The Linux headless build uses this directory, telldus-core/, as the CMake
+source root. The Phase 1 headless boundary is the daemon target telldusd, the
+shared library target telldus-core, and the command-line target tdtool.
+
+TelldusCenter, Qt GUI components, bindings, examples, Docker runtime setup,
+Raspberry Pi-specific packaging, MQTT, and Home Assistant integration are
+outside this headless build boundary.
+
+Prerequisites for the basic headless configure/build proof are:
+
+	- CMake
+	- C and C++ compiler toolchain
+	- pthreads / CMake Threads
+	- libconfuse
+	- libftdi/libusb stack
+	- pkg-config
+
+From the repository root, configure the headless build with:
+
+	cmake -S telldus-core -B build/telldus-core-headless \
+	  -DFORCE_COMPILE_FROM_TRUNK=TRUE \
+	  -DBUILD_TDTOOL=TRUE \
+	  -DBUILD_TDADMIN=FALSE \
+	  -DENABLE_TESTING=FALSE \
+	  -DFTDI_ENGINE=libftdi
+
+Then prove the headless target graph with:
+
+	cmake --build build/telldus-core-headless --target telldusd telldus-core tdtool -- -n
+
+The dry build command is intentionally non-installing and does not require a
+TellStick to be connected. Full Arch Linux build/test fixing continues in
+Phase 2.
+
 TellStick is a trademark of Telldus Technologies AB

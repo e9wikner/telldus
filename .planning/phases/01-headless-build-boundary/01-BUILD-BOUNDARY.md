@@ -124,3 +124,40 @@ It failed with:
 ```text
 /usr/bin/bash: line 1: cmake: command not found
 ```
+
+## Proof Result
+
+Phase 1 attempted the headless configure proof from the repository root after the CMake boundary changes:
+
+```bash
+cmake -S telldus-core -B build/telldus-core-headless \
+  -DFORCE_COMPILE_FROM_TRUNK=TRUE \
+  -DBUILD_TDTOOL=TRUE \
+  -DBUILD_TDADMIN=FALSE \
+  -DENABLE_TESTING=FALSE \
+  -DFTDI_ENGINE=libftdi
+```
+
+Result:
+
+```text
+/usr/bin/bash: line 1: cmake: command not found
+```
+
+Status: Configure proof is blocked by the local environment prerequisite `cmake`, not by a source-code failure observed in this phase.
+
+## Dry Build Proof
+
+The intended dry build or target-graph proof is:
+
+```bash
+cmake --build build/telldus-core-headless --target telldusd telldus-core tdtool -- -n
+```
+
+Targets covered by this proof:
+
+- `telldusd`
+- `telldus-core`
+- `tdtool`
+
+Status: Dry build proof is blocked until the configure proof creates `build/telldus-core-headless`. The first blocker is still `cmake: command not found`.
