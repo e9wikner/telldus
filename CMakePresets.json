@@ -1,0 +1,18 @@
+{
+	"version": 3,
+	"configurePresets": [
+		{
+			"name": "headless",
+			"displayName": "Headless Linux Build",
+			"description": "Configure telldus-core for headless Linux build with libftdi",
+			"binaryDir": "${sourceDir}/build/headless",
+			"cacheVariables": {
+				"FORCE_COMPILE_FROM_TRUNK": "TRUE",
+				"BUILD_TDTOOL": "TRUE",
+				"BUILD_TDADMIN": "FALSE",
+				"ENABLE_TESTING": "FALSE",
+				"FTDI_ENGINE": "libftdi"
+			}
+		}
+	]
+}
