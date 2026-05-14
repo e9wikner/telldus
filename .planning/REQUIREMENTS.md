@@ -86,37 +86,37 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NBLD-01 | TBD | Pending |
-| NBLD-02 | TBD | Pending |
-| NBLD-03 | TBD | Pending |
-| NBLD-04 | TBD | Pending |
-| DOCK-01 | TBD | Pending |
-| DOCK-02 | TBD | Pending |
-| DOCK-03 | TBD | Pending |
-| DOCK-04 | TBD | Pending |
-| DOCK-05 | TBD | Pending |
-| DUO-01 | TBD | Pending |
-| DUO-02 | TBD | Pending |
-| DUO-03 | TBD | Pending |
-| DUO-04 | TBD | Pending |
-| DUO-05 | TBD | Pending |
-| DUO-06 | TBD | Pending |
-| DUO-07 | TBD | Pending |
-| CONF-01 | TBD | Pending |
-| CONF-02 | TBD | Pending |
-| CONF-03 | TBD | Pending |
-| CONF-04 | TBD | Pending |
-| DOCS-01 | TBD | Pending |
-| DOCS-02 | TBD | Pending |
-| DOCS-03 | TBD | Pending |
-| DOCS-04 | TBD | Pending |
-| DOCS-05 | TBD | Pending |
+| NBLD-01 | Phase 1 | Pending |
+| NBLD-02 | Phase 2 | Pending |
+| NBLD-03 | Phase 3 | Pending |
+| NBLD-04 | Phase 2 | Pending |
+| DOCK-01 | Phase 5 | Pending |
+| DOCK-02 | Phase 6 | Pending |
+| DOCK-03 | Phase 5 | Pending |
+| DOCK-04 | Phase 6 | Pending |
+| DOCK-05 | Phase 6 | Pending |
+| DUO-01 | Phase 7 | Pending |
+| DUO-02 | Phase 6 | Pending |
+| DUO-03 | Phase 7 | Pending |
+| DUO-04 | Phase 7 | Pending |
+| DUO-05 | Phase 7 | Pending |
+| DUO-06 | Phase 7 | Pending |
+| DUO-07 | Phase 6 | Pending |
+| CONF-01 | Phase 4 | Pending |
+| CONF-02 | Phase 4 | Pending |
+| CONF-03 | Phase 5 | Pending |
+| CONF-04 | Phase 4 | Pending |
+| DOCS-01 | Phase 8 | Pending |
+| DOCS-02 | Phase 8 | Pending |
+| DOCS-03 | Phase 8 | Pending |
+| DOCS-04 | Phase 7 | Pending |
+| DOCS-05 | Phase 8 | Pending |
 
 **Coverage:**
 - v1 requirements: 25 total
-- Mapped to phases: 0
-- Unmapped: 25
+- Mapped to phases: 25
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-05-14*
-*Last updated: 2026-05-14 after initial definition*
+*Last updated: 2026-05-14 after roadmap creation*
