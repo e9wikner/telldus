@@ -108,6 +108,17 @@ None - plan executed exactly as written.
 - **Ready for 03-02:** The Debian dependency script and Docker build commands are in place. Wave 2 can now attempt the actual multi-arch compilation of telldus-core.
 - **Blockers:** None.
 
+## Self-Check: PASSED
+
+- [x] scripts/install-debian-deps.sh exists and is executable
+- [x] docs/phase-03-docker-commands.md exists
+- [x] 03-01-SUMMARY.md exists
+- [x] Commit d3ff314 (Task 1) found in git log
+- [x] Commit 84cb516 (Task 2) found in git log
+- [x] Commit 85f98b4 (Task 3) found in git log
+- [x] Commit 2163029 (SUMMARY) found in git log
+- [x] Commit cfbcbdc (metadata) found in git log
+
 ---
 *Phase: 03-raspberry-pi-portability*
 *Completed: 2026-05-14*
