@@ -57,7 +57,7 @@ Plans:
 
 Plans:
 **Wave 1**
-- [ ] 02-01-PLAN.md — Install/confirm Arch build dependencies and run initial configure/build
+- [x] 02-01-PLAN.md — Install/confirm Arch build dependencies and run initial configure/build (completed 2026-05-14)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 02-02-PLAN.md — Fix modern compiler and dependency breakages in headless components
@@ -172,7 +172,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Headless Build Boundary | 3/3 | Complete | 2026-05-14 |
-| 2. Arch Native Build | 0/3 | Not started | - |
+| 2. Arch Native Build | 1/3 | In Progress | 2026-05-14 |
 | 3. Raspberry Pi Portability | 0/3 | Not started | - |
 | 4. Config Compatibility | 0/3 | Not started | - |
 | 5. Docker Image and Config Mount | 0/3 | Not started | - |
