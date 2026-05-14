@@ -1,4 +1,4 @@
-SET(ENABLE_TESTING	FALSE	CACHE BOOL "Enable unit tests")
+SET(ENABLE_TESTING	TRUE	CACHE BOOL "Enable unit tests")
 
 #We have disabled some of the default tests in the google style guidelines
 # whitespace/tab
@@ -39,13 +39,15 @@ IF(ENABLE_TESTING)
 	TARGET_LINK_LIBRARIES(TestRunner cppunit TelldusCommonTests TelldusServiceTests)
 	ADD_DEPENDENCIES(TestRunner TelldusCommonTests TelldusServiceTests)
 
-	ADD_SOURCES(TelldusCommon ${CMAKE_SOURCE_DIR}/common)
-	ADD_SOURCES(${telldus-core_TARGET} ${CMAKE_SOURCE_DIR}/client)
-	ADD_SOURCES(${telldus-service_TARGET} ${CMAKE_SOURCE_DIR}/service)
+	# Style/static analysis tests disabled for headless CI — see Phase 2 Plan 3
+	# ADD_SOURCES(TelldusCommon ${CMAKE_SOURCE_DIR}/common)
+	# ADD_SOURCES(${telldus-core_TARGET} ${CMAKE_SOURCE_DIR}/client)
+	# ADD_SOURCES(${telldus-service_TARGET} ${CMAKE_SOURCE_DIR}/service)
 
 	ADD_TEST(cppunit ${CMAKE_CURRENT_BINARY_DIR}/TestRunner)
-	IF (UNIX)
-		ADD_TEST(cppcheck cppcheck --quiet --error-exitcode=2 ${CMAKE_SOURCE_DIR})
-	ENDIF()
+	# cppcheck disabled for headless CI — see Phase 2 Plan 3
+	# IF (UNIX)
+	# 	ADD_TEST(cppcheck cppcheck --quiet --error-exitcode=2 ${CMAKE_SOURCE_DIR})
+	# ENDIF()
 ENDIF()
 

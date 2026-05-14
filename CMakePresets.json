@@ -10,7 +10,7 @@
 				"FORCE_COMPILE_FROM_TRUNK": "TRUE",
 				"BUILD_TDTOOL": "TRUE",
 				"BUILD_TDADMIN": "FALSE",
-				"ENABLE_TESTING": "FALSE",
+				"ENABLE_TESTING": "TRUE",
 				"FTDI_ENGINE": "libftdi"
 			}
 		}
