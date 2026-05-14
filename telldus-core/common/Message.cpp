@@ -28,7 +28,7 @@ Message::~Message(void) {
 void Message::addArgument(const std::wstring &value) {
 	// std::wstringstream st;
 	// st << (int)value.size();
-	this->append(TelldusCore::intToWstring(value.size()));  // st.str());
+	this->append(TelldusCore::intToWstring(static_cast<int>(value.size())));  // st.str());
 	this->append(L":");
 	this->append(value);
 }
@@ -104,7 +104,7 @@ bool Message::nextIsString(const std::wstring &message) {
 	if (message.length() == 0) {
 		return false;
 	}
-	return (iswdigit(message.at(0)) != 0);
+	return (iswdigit(static_cast<wint_t>(message.at(0))) != 0);
 }
 
 std::wstring Message::takeString(std::wstring *message) {
@@ -113,8 +113,8 @@ std::wstring Message::takeString(std::wstring *message) {
 	}
 	size_t index = message->find(':');
 	int length = wideToInteger(message->substr(0, index));
-	std::wstring retval(message->substr(index+1, length));
-	message->erase(0, index+length+1);
+	std::wstring retval(message->substr(static_cast<size_t>(index)+1, static_cast<size_t>(length)));
+	message->erase(0, static_cast<size_t>(index)+static_cast<size_t>(length)+1);
 	return retval;
 }
 

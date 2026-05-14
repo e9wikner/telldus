@@ -241,7 +241,7 @@ std::string TelldusCore::sformatf(const char *format, va_list ap) {
 	int size = 100;     /* Guess we need no more than 100 bytes. */
 	char *p, *np;
 
-	if ((p = reinterpret_cast<char*>(malloc(size))) == NULL) {
+	if ((p = reinterpret_cast<char*>(malloc(static_cast<size_t>(size)))) == NULL) {
 		return "";
 	}
 
@@ -249,7 +249,7 @@ std::string TelldusCore::sformatf(const char *format, va_list ap) {
 		/* Try to print in the allocated space. */
 		va_list ap2;
 		va_copy(ap2, ap);
-		n = vsnprintf(p, size, format, ap2);
+		n = vsnprintf(p, static_cast<size_t>(size), format, ap2);
 		va_end(ap2);
 
 		/* If that worked, return the string. */
@@ -266,7 +266,7 @@ std::string TelldusCore::sformatf(const char *format, va_list ap) {
 		} else {        /* glibc 2.0 */
 			size *= 2;  /* twice the old size */
 		}
-		if ((np = reinterpret_cast<char *>(realloc (p, size))) == NULL) {
+		if ((np = reinterpret_cast<char *>(realloc(p, static_cast<size_t>(size)))) == NULL) {
 			free(p);
 			return "";
 		} else {

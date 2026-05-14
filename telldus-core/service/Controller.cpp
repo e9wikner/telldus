@@ -39,7 +39,7 @@ Controller::Controller(int id, TelldusCore::EventRef event, TelldusCore::EventRe
 	d->updateEvent = updateEvent;
 	d->id = id;
 	d->firmwareVersion = 0;
-	d->randSeed = time(NULL);
+	d->randSeed = static_cast<unsigned int>(time(NULL));
 }
 
 Controller::~Controller() {

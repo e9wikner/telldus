@@ -127,38 +127,38 @@ std::string ProtocolX10::decodeData(const ControllerMessage& dataMsg) {
 	int rawHouse = 0;
 	for(int i = 0; i < 4; ++i) {
 		rawHouse >>= 1;
-		if (checkBit(intData, currentBit--)) {
+		if (checkBit(static_cast<int>(intData), static_cast<int>(currentBit--))) {
 			rawHouse |= 0x8;
 		}
 	}
 
-	if (checkBit(intData, currentBit--) != 0) {
+	if (checkBit(static_cast<int>(intData), static_cast<int>(currentBit--)) != 0) {
 		return "";
 	}
 
-	if (checkBit(intData, currentBit--)) {
+	if (checkBit(static_cast<int>(intData), static_cast<int>(currentBit--))) {
 		unit |= (1<<3);
 	}
 
-	if (checkBit(intData, currentBit--)) {
+	if (checkBit(static_cast<int>(intData), static_cast<int>(currentBit--))) {
 		return "";
 	}
-	if (checkBit(intData, currentBit--)) {
+	if (checkBit(static_cast<int>(intData), static_cast<int>(currentBit--))) {
 		return "";
 	}
 
 	currentBit = 14;
 
-	if (checkBit(intData, currentBit--)) {
+	if (checkBit(static_cast<int>(intData), static_cast<int>(currentBit--))) {
 		unit |= (1<<2);
 	}
-	if (checkBit(intData, currentBit--)) {
+	if (checkBit(static_cast<int>(intData), static_cast<int>(currentBit--))) {
 		method = 1;
 	}
-	if (checkBit(intData, currentBit--)) {
+	if (checkBit(static_cast<int>(intData), static_cast<int>(currentBit--))) {
 		unit |= (1<<0);
 	}
-	if (checkBit(intData, currentBit--)) {
+	if (checkBit(static_cast<int>(intData), static_cast<int>(currentBit--))) {
 		unit |= (1<<1);
 	}
 

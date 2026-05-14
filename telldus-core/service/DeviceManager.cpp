@@ -564,7 +564,7 @@ int DeviceManager::executeScene(std::wstring singledevice, int groupDeviceId) {
 	}
 	unsigned char devicedata = 0;
 	if(deviceParts[2] != L"") {
-		devicedata = TelldusCore::wideToInteger(deviceParts[2]);
+		devicedata = static_cast<unsigned char>(TelldusCore::wideToInteger(deviceParts[2]));
 	}
 
 	if(deviceId > 0 && method > 0) {  // check for format error in parameter "devices"
@@ -713,7 +713,7 @@ void DeviceManager::handleSensorMessage(const ControllerMessage &msg) {
 	}
 
 	if (!sensor) {
-		sensor = new Sensor(msg.protocol(), msg.model(), msg.getInt64Parameter("id"));
+		sensor = new Sensor(msg.protocol(), msg.model(), static_cast<int>(msg.getInt64Parameter("id")));
 		d->sensorList.push_back(sensor);
 	}
 	TelldusCore::MutexLocker sensorLocker(sensor);

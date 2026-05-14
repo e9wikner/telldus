@@ -75,7 +75,7 @@ void Socket::connect(const std::wstring &server) {
 	remote.sun_family = AF_UNIX;
 	snprintf(remote.sun_path, sizeof(remote.sun_path), "%s", name.c_str());
 
-	len = SUN_LEN(&remote);
+	len = static_cast<socklen_t>(SUN_LEN(&remote));
 	if (connectWrapper(d->socket, (struct sockaddr *)&remote, len) == -1) {
 		return;
 	}
@@ -100,7 +100,7 @@ std::wstring Socket::read(int timeout) {
 	FD_SET(d->socket, &d->infds);
 	std::string msg;
 	while(isConnected()) {
-		tv.tv_sec = floor(timeout / 1000.0);
+		tv.tv_sec = static_cast<__time_t>(floor(timeout / 1000.0));
 		tv.tv_usec = timeout % 1000;
 
 		int response = select(d->socket+1, &d->infds, NULL, NULL, &tv);
@@ -114,7 +114,7 @@ std::wstring Socket::read(int timeout) {
 		int received = BUFSIZE;
 		while(received >= (BUFSIZE - 1)) {
 			memset(inbuf, '\0', sizeof(inbuf));
-			received = recv(d->socket, inbuf, BUFSIZE - 1, 0);
+			received = static_cast<int>(recv(d->socket, inbuf, BUFSIZE - 1, 0));
 			if(received > 0) {
 				msg.append(std::string(inbuf));
 			}
@@ -139,7 +139,7 @@ void Socket::stopReadWait() {
 
 void Socket::write(const std::wstring &msg) {
 	std::string newMsg(TelldusCore::wideToString(msg));
-	int sent = send(d->socket, newMsg.c_str(), newMsg.length(), 0);
+	int sent = static_cast<int>(send(d->socket, newMsg.c_str(), newMsg.length(), 0));
 	if (sent < 0) {
 		TelldusCore::MutexLocker locker(&d->mutex);
 		d->connected = false;

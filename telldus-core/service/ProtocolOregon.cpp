@@ -37,7 +37,7 @@ std::string ProtocolOregon::decodeEA4C(const std::string &data) {
 	uint64_t value = TelldusCore::hexTo64l(data);
 
 	uint8_t checksum = 0xE + 0xA + 0x4 + 0xC;
-	checksum -= (value & 0xF) * 0x10;
+	checksum = static_cast<uint8_t>(checksum - (value & 0xF) * 0x10);
 	checksum -= 0xA;
 	value >>= 8;
 
@@ -49,18 +49,18 @@ std::string ProtocolOregon::decodeEA4C(const std::string &data) {
 
 	uint8_t temp2 = value & 0xF;
 	uint8_t temp1 = (value >> 4) & 0xF;
-	checksum += temp2 + temp1;
+	checksum = static_cast<uint8_t>(checksum + temp2 + temp1);
 	value >>= 8;
 
 	uint8_t temp3 = (value >> 4) & 0xF;
-	checksum += (value & 0xF) + temp3;
+	checksum = static_cast<uint8_t>(checksum + (value & 0xF) + temp3);
 	value >>= 8;
 
-	checksum += ((value >> 4) & 0xF) + (value & 0xF);
+	checksum = static_cast<uint8_t>(checksum + ((value >> 4) & 0xF) + (value & 0xF));
 	uint8_t address = value & 0xFF;
 	value >>= 8;
 
-	checksum += ((value >> 4) & 0xF) + (value & 0xF);
+	checksum = static_cast<uint8_t>(checksum + ((value >> 4) & 0xF) + (value & 0xF));
 	// channel not used
 	// uint8_t channel = (value >> 4) & 0x7;
 
@@ -116,7 +116,7 @@ std::string ProtocolOregon::decode1984(const std::string &data, const std::wstri
 	uint8_t checksum = ((value >> 4) & 0xF) + (value & 0xF);
 	value >>= 8;
 	uint8_t channel = value & 0xF;
-	checksum += unknown1 + unknown2 + avg1 + avg2 + avg3 + gust1 + gust2 + gust3 + direction + battery + channel;
+	checksum = static_cast<uint8_t>(checksum + unknown1 + unknown2 + avg1 + avg2 + avg3 + gust1 + gust2 + gust3 + direction + battery + channel);
 
 	if (model.compare(L"0x1984") == 0) {
 		checksum += 0x1 + 0x9 + 0x8 + 0x4;
@@ -132,7 +132,7 @@ std::string ProtocolOregon::decode1984(const std::string &data, const std::wstri
 
 	double avg = ((avg1 * 100) + (avg2 * 10) + avg3)/10.0;
 	double gust = ((gust1 * 100) + (gust2 * 10) + gust3)/10.0;
-	float directiondegree = 22.5 * direction;
+	float directiondegree = static_cast<float>(22.5 * direction);
 
 	std::stringstream retString;
 	retString << "class:sensor;protocol:oregon;model:1984;id:" << static_cast<int>(rollingcode)
@@ -155,25 +155,25 @@ std::string ProtocolOregon::decode1A2D(const std::string &data) {
 	uint8_t hum1 = value & 0xF;
 	value >>= 8;
 
-	checksum += ((value >> 4) & 0xF) + (value & 0xF);
+	checksum = static_cast<uint8_t>(checksum + ((value >> 4) & 0xF) + (value & 0xF));
 	uint8_t neg = value & (1 << 3);
 	uint8_t hum2 = (value >> 4) & 0xF;
 	value >>= 8;
 
-	checksum += ((value >> 4) & 0xF) + (value & 0xF);
+	checksum = static_cast<uint8_t>(checksum + ((value >> 4) & 0xF) + (value & 0xF));
 	uint8_t temp2 = value & 0xF;
 	uint8_t temp1 = (value >> 4) & 0xF;
 	value >>= 8;
 
-	checksum += ((value >> 4) & 0xF) + (value & 0xF);
+	checksum = static_cast<uint8_t>(checksum + ((value >> 4) & 0xF) + (value & 0xF));
 	uint8_t temp3 = (value >> 4) & 0xF;
 	value >>= 8;
 
-	checksum += ((value >> 4) & 0xF) + (value & 0xF);
+	checksum = static_cast<uint8_t>(checksum + ((value >> 4) & 0xF) + (value & 0xF));
 	uint8_t address = value & 0xFF;
 	value >>= 8;
 
-	checksum += ((value >> 4) & 0xF) + (value & 0xF);
+	checksum = static_cast<uint8_t>(checksum + ((value >> 4) & 0xF) + (value & 0xF));
 	// channel not used
 	// uint8_t channel = (value >> 4) & 0x7;
 
@@ -188,7 +188,7 @@ std::string ProtocolOregon::decode1A2D(const std::string &data) {
 	if (neg) {
 		temperature = -temperature;
 	}
-	int humidity = (hum1 * 10.0) + hum2;
+	int humidity = static_cast<int>((hum1 * 10.0) + hum2);
 
 	std::stringstream retString;
 	retString << "class:sensor;protocol:oregon;model:1A2D;id:" << static_cast<int>(address)
@@ -234,7 +234,7 @@ std::string ProtocolOregon::decode2914(const std::string &data) {
 	uint8_t checksum = ((value >> 4) & 0xF) + (value & 0xF);
 	value >>= 8;
 	uint8_t channel = value & 0xF;
-	checksum += totRain1 + totRain2 + totRain3 + totRain4 + totRain5 + totRain6 + rainRate1 + rainRate2 + rainRate3 + rainRate4 + battery + channel + 0x2 + 0x9 + 0x1 + 0x4;
+	checksum = static_cast<uint8_t>(checksum + totRain1 + totRain2 + totRain3 + totRain4 + totRain5 + totRain6 + rainRate1 + rainRate2 + rainRate3 + rainRate4 + battery + channel + 0x2 + 0x9 + 0x1 + 0x4);
 
 	if (((checksum >> 4) & 0xF) != messageChecksum1 || (checksum & 0xF) != messageChecksum2) {
 		// checksum error
@@ -280,7 +280,7 @@ std::string ProtocolOregon::decodeF824(const std::string &data) {
 	uint8_t checksum = ((value >> 4) & 0xF) + (value & 0xF);
 	value >>= 8;
 	uint8_t channel = value & 0xF;
-	checksum += unknown + hum1 + hum2 + neg + temp1 + temp2 + temp3 + battery + channel + 0xF + 0x8 + 0x2 + 0x4;
+	checksum = static_cast<uint8_t>(checksum + unknown + hum1 + hum2 + neg + temp1 + temp2 + temp3 + battery + channel + 0xF + 0x8 + 0x2 + 0x4);
 
 	if (((checksum >> 4) & 0xF) != messageChecksum1 || (checksum & 0xF) != messageChecksum2) {
 		// checksum error
@@ -291,7 +291,7 @@ std::string ProtocolOregon::decodeF824(const std::string &data) {
 	if (neg) {
 		temperature = -temperature;
 	}
-	int humidity = (hum1 * 10.0) + hum2;
+	int humidity = static_cast<int>((hum1 * 10.0) + hum2);
 
 	std::stringstream retString;
 	retString << "class:sensor;protocol:oregon;model:F824;id:" << static_cast<int>(rollingcode)
@@ -322,7 +322,7 @@ std::string ProtocolOregon::decodeC844(const std::string &data, const std::wstri
 	uint8_t checksum = ((value >> 4) & 0xF) + (value & 0xF);
 	value >>= 8;
 	uint8_t channel = value & 0xF;
-	checksum += neg + temp1 + temp2 + temp3 + battery + channel;
+	checksum = static_cast<uint8_t>(checksum + neg + temp1 + temp2 + temp3 + battery + channel);
 
 	if (model.compare(L"0xC844") == 0) {
 		checksum += 0xC + 0x8 + 0x4 + 0x4;

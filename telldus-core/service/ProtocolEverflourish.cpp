@@ -15,8 +15,8 @@ int ProtocolEverflourish::methods() const {
 }
 
 std::string ProtocolEverflourish::getStringForMethod(int method, unsigned char, Controller *) {
-	unsigned int deviceCode = this->getIntParameter(L"house", 0, 16383);
-	unsigned int intCode = this->getIntParameter(L"unit", 1, 4)-1;
+	unsigned int deviceCode = static_cast<unsigned int>(this->getIntParameter(L"house", 0, 16383));
+	unsigned int intCode = static_cast<unsigned int>(this->getIntParameter(L"unit", 1, 4))-1;
 	unsigned char action;
 
 	if (method == TELLSTICK_TURNON) {
@@ -40,7 +40,7 @@ std::string ProtocolEverflourish::getStringForMethod(int method, unsigned char, 
 
 	deviceCode = (deviceCode << 2) | intCode;
 
-	check = calculateChecksum(deviceCode);
+	check = static_cast<int>(calculateChecksum(deviceCode));
 
 	char preamble[] = {'R', 5, 'T', 114, 60, 1, 1, 105, ssss, ssss, 0};
 	strCode.append(preamble);

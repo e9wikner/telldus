@@ -65,7 +65,7 @@ void ConnectionListener::run() {
 	memset(name.sun_path, '\0', sizeof(name.sun_path));
 	strncpy(name.sun_path, d->name.c_str(), sizeof(name.sun_path));
 	unlink(name.sun_path);
-	int size = SUN_LEN(&name);
+	unsigned int size = static_cast<unsigned int>(SUN_LEN(&name));
 	bind(serverSocket, (struct sockaddr *)&name, size);
 	listen(serverSocket, 5);
 

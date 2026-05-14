@@ -92,7 +92,7 @@ void ClientCommunicationHandler::parseMessage(const std::wstring &clientMessage,
 	} else if (function == L"tdDim") {
 		int deviceId = TelldusCore::Message::takeInt(&msg);
 		int level = TelldusCore::Message::takeInt(&msg);
-		(*intReturn) = d->deviceManager->doAction(deviceId, TELLSTICK_DIM, level);
+		(*intReturn) = d->deviceManager->doAction(deviceId, TELLSTICK_DIM, static_cast<unsigned char>(level));
 
 	} else if (function == L"tdExecute") {
 		int deviceId = TelldusCore::Message::takeInt(&msg);

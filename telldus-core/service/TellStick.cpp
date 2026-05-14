@@ -16,13 +16,13 @@ std::string TellStick::createTPacket( const std::string &msg ) {
 	int index = 0;
 	for(size_t i = 0; i < msg.length(); ++i) {
 		// Search to se if it already exists and get the index
-		if (times.find(msg.at(i)) == times.end()) {
-			times[msg.at(i)] = index++;
+		if (times.find(static_cast<unsigned char>(msg.at(i))) == times.end()) {
+			times[static_cast<unsigned char>(msg.at(i))] = static_cast<char>(index++);
 			if (times.size() > 4) {
 				return "";
 			}
 		}
-		data.append(1, times[msg.at(i)]);
+		data.append(1, times[static_cast<unsigned char>(msg.at(i))]);
 	}
 	// Reorder the times
 	unsigned char t0 = 1, t1 = 1, t2 = 1, t3 = 1;
@@ -44,16 +44,16 @@ std::string TellStick::createTPacket( const std::string &msg ) {
 std::string TellStick::convertSToT( unsigned char t0, unsigned char t1, unsigned char t2, unsigned char t3, const std::string &data ) {
 	unsigned char dataByte = 0;
 	std::string retString = "T";
-	retString.append(1, t0);
-	retString.append(1, t1);
-	retString.append(1, t2);
-	retString.append(1, t3);
+	retString.append(1, static_cast<char>(t0));
+	retString.append(1, static_cast<char>(t1));
+	retString.append(1, static_cast<char>(t2));
+	retString.append(1, static_cast<char>(t3));
 
 	if (data.length() > 255) {
 		return "";
 	}
 	unsigned char length = (unsigned char)data.length();
-	retString.append(1, length);
+	retString.append(1, static_cast<char>(length));
 
 	for (size_t i = 0; i < data.length(); ++i) {
 		dataByte <<= 2;
@@ -65,13 +65,13 @@ std::string TellStick::convertSToT( unsigned char t0, unsigned char t1, unsigned
 			dataByte |= 3;
 		}
 		if ( (i+1) % 4 == 0) {
-			retString.append(1, dataByte);
+			retString.append(1, static_cast<char>(dataByte));
 			dataByte = 0;
 		}
 	}
 	if (data.length() % 4 != 0) {
 		dataByte <<= (data.length() % 4)*2;
-		retString.append(1, dataByte);
+		retString.append(1, static_cast<char>(dataByte));
 	}
 
 	retString.append("+");

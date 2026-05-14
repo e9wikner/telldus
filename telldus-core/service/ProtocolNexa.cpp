@@ -107,7 +107,7 @@ std::string ProtocolNexa::getStringSelflearningForCode(int intHouse, int intCode
 	// const char START[] = {'T',130,255,26,24,0};
 
 	std::string strMessage(reinterpret_cast<const char*>(START));
-	strMessage.append(1, (method == TELLSTICK_DIM ? 147 : 132));  // Number of pulses
+	strMessage.append(1, static_cast<char>(method == TELLSTICK_DIM ? 147 : 132));  // Number of pulses
 
 	std::string m;
 	for (int i = 25; i >= 0; --i) {
@@ -151,7 +151,7 @@ std::string ProtocolNexa::getStringSelflearningForCode(int intHouse, int intCode
 			// code |= 11; //b1011
 		}
 		if (i % 2 == 0) {
-			strMessage.append(1, code);
+			strMessage.append(1, static_cast<char>(code));
 			code = 0;
 		}
 	}

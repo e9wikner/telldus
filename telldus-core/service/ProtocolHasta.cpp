@@ -26,15 +26,15 @@ std::string ProtocolHasta::getStringForMethodv1(int method) {
 	int unit = this->getIntParameter(L"unit", 1, 15);
 	std::string strReturn;
 
-	strReturn.append(1, 164);
+	strReturn.append(1, static_cast<char>(164));
 	strReturn.append(1, 1);
-	strReturn.append(1, 164);
+	strReturn.append(1, static_cast<char>(164));
 	strReturn.append(1, 1);
-	strReturn.append(1, 164);
-	strReturn.append(1, 164);
+	strReturn.append(1, static_cast<char>(164));
+	strReturn.append(1, static_cast<char>(164));
 
-	strReturn.append(convertByte( (house & 0xFF) ));
-	strReturn.append(convertByte( (house>>8) & 0xFF ));
+	strReturn.append(convertByte(static_cast<unsigned char>(house & 0xFF)));
+	strReturn.append(convertByte(static_cast<unsigned char>((house>>8) & 0xFF)));
 
 	int byte = unit&0x0F;
 
@@ -53,7 +53,7 @@ std::string ProtocolHasta::getStringForMethodv1(int method) {
 	} else {
 		return "";
 	}
-	strReturn.append(convertByte(byte));
+	strReturn.append(convertByte(static_cast<unsigned char>(byte)));
 
 	strReturn.append(convertByte(0x0));
 	strReturn.append(convertByte(0x0));
@@ -84,10 +84,10 @@ std::string ProtocolHasta::getStringForMethodv2(int method) {
 	int unit = this->getIntParameter(L"unit", 1, 15);
 	int sum = 0;
 	std::string strReturn;
-	strReturn.append(1, 245);
+	strReturn.append(1, static_cast<char>(245));
 	strReturn.append(1, 1);
-	strReturn.append(1, 245);
-	strReturn.append(1, 245);
+	strReturn.append(1, static_cast<char>(245));
+	strReturn.append(1, static_cast<char>(245));
 	strReturn.append(1, 63);
 	strReturn.append(1, 1);
 	strReturn.append(1, 63);
@@ -95,9 +95,9 @@ std::string ProtocolHasta::getStringForMethodv2(int method) {
 	strReturn.append(1, 35);
 	strReturn.append(1, 35);
 
-	strReturn.append(convertBytev2( (house>>8) & 0xFF ));
+	strReturn.append(convertBytev2(static_cast<unsigned char>((house>>8) & 0xFF)));
 	sum = ((house>>8)&0xFF);
-	strReturn.append(convertBytev2( (house & 0xFF) ));
+	strReturn.append(convertBytev2(static_cast<unsigned char>(house & 0xFF)));
 	sum += (house & 0xFF);
 
 	int byte = unit&0x0F;
@@ -117,14 +117,14 @@ std::string ProtocolHasta::getStringForMethodv2(int method) {
 	} else {
 		return "";
 	}
-	strReturn.append(convertBytev2(byte));
+	strReturn.append(convertBytev2(static_cast<unsigned char>(byte)));
 	sum += byte;
 
 	strReturn.append(convertBytev2(0x01));
 	sum += 0x01;
 
 	int checksum = ((static_cast<int>(sum/256)+1)*256+1) - sum;
-	strReturn.append(convertBytev2(checksum));
+	strReturn.append(convertBytev2(static_cast<unsigned char>(checksum)));
 	strReturn.append(1, 63);
 	strReturn.append(1, 35);
 

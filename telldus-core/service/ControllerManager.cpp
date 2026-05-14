@@ -79,7 +79,7 @@ int ControllerManager::count() {
 			}
 		}
 	}
-	return count;
+	return static_cast<int>(count);
 }
 
 void ControllerManager::deviceInsertedOrRemoved(int vid, int pid, const std::string &serial, bool inserted) {

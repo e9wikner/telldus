@@ -72,7 +72,7 @@ std::string ProtocolIkea::getStringForMethod(int method, unsigned char level, Co
 	strReturn.append(1, 84);
 	strReturn.append(1, 84);
 	strReturn.append(1, 84);
-	strReturn.append(1, 170);
+	strReturn.append(1, static_cast<char>(170));
 
 	std::string strChannels = "";
 	int intCode = (intSystem << 10) | intUnits;

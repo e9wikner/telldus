@@ -226,7 +226,7 @@ void EventUpdateManager::executeScripts(EventUpdateData *data) {
 	}
 
 	char *newEnv[env.size()+1];  // +1 for the last stop element
-	for(int i = 0; i < env.size(); ++i) {
+	for(size_t i = 0; i < env.size(); ++i) {
 		newEnv[i] = new char[env.at(i).length()+1];
 		snprintf(newEnv[i], env.at(i).length()+1, "%s", env.at(i).c_str());
 	}
