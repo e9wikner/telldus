@@ -78,7 +78,7 @@ Plans:
 
 Plans:
 - [x] 03-01: Create or select a Debian/Raspberry Pi `aarch64` build environment
-- [ ] 03-02: Build the headless components for the Raspberry Pi target
+- [x] 03-02: Build the headless components for the Raspberry Pi target
 - [ ] 03-03: Resolve portability issues and confirm matching artifacts
 
 ### Phase 4: Config Compatibility
