@@ -35,8 +35,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
+**Wave 1**
 - [ ] 01-01: Audit current CMake options and dependency coupling
+
+**Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 01-02: Add or adjust headless Linux build configuration
+
+**Wave 3** *(blocked on Wave 2 completion)*
 - [ ] 01-03: Verify GUI-free configuration excludes TelldusCenter and Qt dependencies
 
 ### Phase 2: Arch Native Build
