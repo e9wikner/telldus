@@ -9,7 +9,7 @@ sudo pacman -S --needed --noconfirm \
 	gcc \
 	make \
 	libftdi \
-	libconfuse \
+	confuse \
 	libusb-compat \
 	pkg-config \
 	cppunit \
