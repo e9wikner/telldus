@@ -4,6 +4,18 @@ CMAKE_MINIMUM_REQUIRED( VERSION 2.6.0...3.24.3 )
 
 CMAKE_POLICY(SET CMP0003 NEW)
 
+IF(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+	ADD_COMPILE_OPTIONS(
+		-Wall
+		-Wextra
+		-Wdeprecated-declarations
+		-Wconversion
+		-Wsign-conversion
+		-Werror=deprecated-declarations
+		-Werror=return-type
+	)
+ENDIF()
+
 OPTION(FORCE_COMPILE_FROM_TRUNK FALSE "Accept compiling source from trunk. This is unsupported and highly unrecommended")
 IF(NOT FORCE_COMPILE_FROM_TRUNK)
 	MESSAGE(FATAL_ERROR "You are compiling sources from trunk. Don't do that!")
