@@ -33,7 +33,7 @@ inline void msleep( const int msec) {
 #ifdef _WINDOWS
 	Sleep(msec);
 #else
-	usleep(msec*1000);
+	usleep(static_cast<useconds_t>(msec)*1000);
 #endif
 }
 

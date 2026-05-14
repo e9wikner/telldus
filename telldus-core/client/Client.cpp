@@ -213,10 +213,12 @@ int Client::getSensor(char *protocol, int protocolLen, char *model, int modelLen
 	int dt = Message::takeInt(&d->sensorCache);
 
 	if (protocol && protocolLen) {
-		strncpy(protocol, TelldusCore::wideToString(p).c_str(), protocolLen);
+		strncpy(protocol, TelldusCore::wideToString(p).c_str(), static_cast<size_t>(protocolLen));
+		protocol[protocolLen - 1] = '\0';
 	}
 	if (model && modelLen) {
-		strncpy(model, TelldusCore::wideToString(m).c_str(), modelLen);
+		strncpy(model, TelldusCore::wideToString(m).c_str(), static_cast<size_t>(modelLen));
+		model[modelLen - 1] = '\0';
 	}
 	if (sensorId) {
 		(*sensorId) = id;
@@ -257,7 +259,8 @@ int Client::getController(int *controllerId, int *controllerType, char *name, in
 		(*controllerType) = type;
 	}
 	if (name && nameLen) {
-		strncpy(name, TelldusCore::wideToString(n).c_str(), nameLen);
+		strncpy(name, TelldusCore::wideToString(n).c_str(), static_cast<size_t>(nameLen));
+		name[nameLen - 1] = '\0';
 	}
 	if (available) {
 		(*available) = a;

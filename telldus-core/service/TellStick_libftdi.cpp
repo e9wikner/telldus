@@ -197,10 +197,10 @@ int TellStick::send( const std::string &strMessage ) {
 	TelldusCore::MutexLocker locker(&d->mutex);
 
 	int ret;
-	ret = ftdi_write_data( &d->ftHandle, tempMessage, strMessage.length() );
+	ret = ftdi_write_data( &d->ftHandle, tempMessage, static_cast<int>(strMessage.length()) );
 	if(ret < 0) {
 		c = false;
-	} else if(ret != strMessage.length()) {
+	} else if(static_cast<size_t>(ret) != strMessage.length()) {
 		Log::debug("Weird send length? retval %i instead of %d\n", ret, static_cast<int>(strMessage.length()));
 	}
 

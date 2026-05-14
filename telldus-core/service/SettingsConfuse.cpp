@@ -72,9 +72,9 @@ int Settings::getNumberOfNodes(Node node) const {
 	TelldusCore::MutexLocker locker(&mutex);
 	if (d->cfg != 0) {
 		if (node == Device) {
-			return cfg_size(d->cfg, "device");
+			return static_cast<int>(cfg_size(d->cfg, "device"));
 		} else if (node == Controller) {
-			return cfg_size(d->cfg, "controller");
+			return static_cast<int>(cfg_size(d->cfg, "controller"));
 		}
 	}
 	return 0;
@@ -87,11 +87,11 @@ int Settings::getNodeId(Node type, int intDeviceIndex) const {
 	TelldusCore::MutexLocker locker(&mutex);
 	cfg_t *cfg_node;
 	if (type == Device) {
-		cfg_node = cfg_getnsec(d->cfg, "device", intDeviceIndex);
+		cfg_node = cfg_getnsec(d->cfg, "device", static_cast<unsigned int>(intDeviceIndex));
 	} else if (type == Controller) {
-		cfg_node = cfg_getnsec(d->cfg, "controller", intDeviceIndex);
+		cfg_node = cfg_getnsec(d->cfg, "controller", static_cast<unsigned int>(intDeviceIndex));
 	}
-	int id = cfg_getint(cfg_node, "id");
+	int id = static_cast<int>(cfg_getint(cfg_node, "id"));
 	return id;
 }
 
@@ -133,10 +133,10 @@ int Settings::getNextNodeId(Node type) const {
 	} else if (type == Controller) {
 		strType = "controller";
 	}
-	for (int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
+	for (unsigned int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
 		cfg_node = cfg_getnsec(d->cfg, strType.c_str(), i);
-		if (cfg_getint(cfg_node, "id") >= intNodeId)  {
-			intNodeId = cfg_getint(cfg_node, "id");
+		if (static_cast<int>(cfg_getint(cfg_node, "id")) >= intNodeId)  {
+			intNodeId = static_cast<int>(cfg_getint(cfg_node, "id"));
 		}
 	}
 	intNodeId++;
@@ -163,9 +163,9 @@ int Settings::removeNode(Node type, int intNodeId) {
 		} else {
 			// Print all sections except the one to remove
 			cfg_t *cfg_node;
-			for (int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
+			for (unsigned int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
 				cfg_node = cfg_getnsec(d->cfg, strType.c_str(), i);
-				if (cfg_getint(cfg_node, "id") != intNodeId) {  // This isn't the one to skip
+				if (static_cast<int>(cfg_getint(cfg_node, "id")) != intNodeId) {  // This isn't the one to skip
 					fprintf(fp, "%s {\n", strType.c_str());
 					cfg_print_indent(cfg_node, fp, 1);
 					fprintf(fp, "}\n");
@@ -188,7 +188,7 @@ bool Settings::setDeviceState( int intDeviceId, int intDeviceState, const std::w
 		return false;
 	}
 	cfg_t *cfg_device;
-	for (int i = 0; i < cfg_size(d->var_cfg, "device"); ++i) {
+	for (unsigned int i = 0; i < cfg_size(d->var_cfg, "device"); ++i) {
 		cfg_device = cfg_getnsec(d->var_cfg, "device", i);
 		int deviceId = atoi(cfg_title(cfg_device));
 		if (deviceId == intDeviceId)  {
@@ -229,11 +229,11 @@ int Settings::getDeviceState( int intDeviceId ) const {
 		return false;
 	}
 	cfg_t *cfg_device;
-	for (int i = 0; i < cfg_size(d->var_cfg, "device"); ++i) {
+	for (unsigned int i = 0; i < cfg_size(d->var_cfg, "device"); ++i) {
 		cfg_device = cfg_getnsec(d->var_cfg, "device", i);
 		int deviceId = atoi(cfg_title(cfg_device));
 		if (deviceId == intDeviceId)  {
-			return cfg_getint(cfg_device, "state");
+			return static_cast<int>(cfg_getint(cfg_device, "state"));
 		}
 	}
 	return TELLSTICK_TURNOFF;
@@ -245,7 +245,7 @@ std::wstring Settings::getDeviceStateValue( int intDeviceId ) const {
 		return L"";
 	}
 	cfg_t *cfg_device;
-	for (int i = 0; i < cfg_size(d->var_cfg, "device"); ++i) {
+	for (unsigned int i = 0; i < cfg_size(d->var_cfg, "device"); ++i) {
 		cfg_device = cfg_getnsec(d->var_cfg, "device", i);
 		int deviceId = atoi(cfg_title(cfg_device));
 		if (deviceId == intDeviceId)  {
@@ -264,9 +264,9 @@ std::wstring Settings::getStringSetting(Node type, int intNodeId, const std::wst
 	std::string strType = getNodeString(type);
 
 	cfg_t *cfg_device;
-	for (int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
+	for (unsigned int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
 		cfg_device = cfg_getnsec(d->cfg, strType.c_str(), i);
-		if (cfg_getint(cfg_device, "id") == intNodeId)  {
+		if (static_cast<int>(cfg_getint(cfg_device, "id")) == intNodeId)  {
 			if (parameter) {
 				cfg_device = cfg_getsec(cfg_device, "parameters");
 			}
@@ -288,9 +288,9 @@ int Settings::setStringSetting(Node type, int intDeviceId, const std::wstring &n
 	}
 	std::string strType = getNodeString(type);
 	cfg_t *cfg_device;
-	for (int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
+	for (unsigned int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
 		cfg_device = cfg_getnsec(d->cfg, strType.c_str(), i);
-		if (cfg_getint(cfg_device, "id") == intDeviceId)  {
+		if (static_cast<int>(cfg_getint(cfg_device, "id")) == intDeviceId)  {
 			std::string newValue = TelldusCore::wideToString(value);
 			cfg_t *p = cfg_device;
 			if (parameter) {
@@ -320,13 +320,13 @@ int Settings::getIntSetting(Node type, int intDeviceId, const std::wstring &name
 	}
 	std::string strType = getNodeString(type);
 	cfg_t *cfg_node;
-	for(int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
+	for(unsigned int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
 		cfg_node = cfg_getnsec(d->cfg, strType.c_str(), i);
-		if (cfg_getint(cfg_node, "id") == intDeviceId) {
+		if (static_cast<int>(cfg_getint(cfg_node, "id")) == intDeviceId) {
 			if (parameter) {
 				cfg_node = cfg_getsec(cfg_node, "parameters");
 			}
-			return cfg_getint(cfg_node, TelldusCore::wideToString(name).c_str());
+			return static_cast<int>(cfg_getint(cfg_node, TelldusCore::wideToString(name).c_str()));
 		}
 	}
 	return 0;
@@ -339,9 +339,9 @@ int Settings::setIntSetting(Node type, int intDeviceId, const std::wstring &name
 	}
 	std::string strType = getNodeString(type);
 	cfg_t *cfg_device;
-	for (int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
+	for (unsigned int i = 0; i < cfg_size(d->cfg, strType.c_str()); ++i) {
 		cfg_device = cfg_getnsec(d->cfg, strType.c_str(), i);
-		if (cfg_getint(cfg_device, "id") == intDeviceId)  {
+		if (static_cast<int>(cfg_getint(cfg_device, "id")) == intDeviceId)  {
 			if (parameter) {
 				cfg_t *cfg_parameters = cfg_getsec(cfg_device, "parameters");
 				cfg_setint(cfg_parameters, TelldusCore::wideToString(name).c_str(), value);

@@ -1178,7 +1178,8 @@ int WINAPI tdSensorValue(const char *protocol, const char *model, int id, int da
 	std::wstring v = TelldusCore::Message::takeString(&retval);
 	int t = TelldusCore::Message::takeInt(&retval);
 	if (value && len) {
-		strncpy(value, TelldusCore::wideToString(v).c_str(), len);
+		strncpy(value, TelldusCore::wideToString(v).c_str(), static_cast<size_t>(len));
+		value[len - 1] = '\0';
 	}
 	if (timestamp) {
 		(*timestamp) = t;
@@ -1244,7 +1245,8 @@ int WINAPI tdControllerValue(int controllerId, const char *name, char *value, in
 	}
 
 	if (value && valueLen) {
-		strncpy(value, TelldusCore::wideToString(retval).c_str(), valueLen);
+		strncpy(value, TelldusCore::wideToString(retval).c_str(), static_cast<size_t>(valueLen));
+		value[valueLen - 1] = '\0';
 	}
 	return TELLSTICK_SUCCESS;
 }

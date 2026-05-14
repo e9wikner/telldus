@@ -200,7 +200,7 @@ int list_devices() {
 			inputstream << winddirectionvalue;
 			int direction;
 			inputstream >> direction;
-			direction = direction / 22.5;
+			direction = static_cast<int>(direction / 22.5);
 			std::string directionabbrev = "N";
 			switch (direction) {
 				case 1:

@@ -69,13 +69,13 @@ std::wstring ControllerMessage::model() const {
 uint64_t ControllerMessage::getInt64Parameter(const std::string &key) const {
 	std::string strValue = getParameter(key);
 	if (strValue.compare("") == 0) {
-		return -1;
+		return static_cast<uint64_t>(-1);
 	}
 	if (strValue.substr(0, 2).compare("0x") == 0) {
 		return TelldusCore::hexTo64l(strValue);
 	}
 	// TODO(micke): strtol() does not return uint64_t. Create a platform independent version similar to hexTo64l()
-	return strtol(strValue.c_str(), NULL, 10);
+	return static_cast<uint64_t>(strtol(strValue.c_str(), NULL, 10));
 }
 
 std::string ControllerMessage::getParameter(const std::string &key) const {
