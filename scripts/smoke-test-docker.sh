@@ -10,12 +10,13 @@ FAIL_COUNT=0
 
 test_sample_config_exists() {
 	echo -n "Test: sample config exists as fallback ... "
-	if docker run --rm --entrypoint cat "$IMAGE" /etc/tellstick.conf 2>/dev/null | grep -q 'user = "nobody"'; then
+	docker run --rm --entrypoint cat "$IMAGE" /etc/tellstick.conf > "$TESTDIR/sample.conf" 2>/dev/null || true
+	if grep -q 'user = "nobody"' "$TESTDIR/sample.conf" 2>/dev/null; then
 		echo "PASS"
-		((PASS_COUNT++))
+		((PASS_COUNT++)) || true
 	else
 		echo "FAIL"
-		((FAIL_COUNT++))
+		((FAIL_COUNT++)) || true
 	fi
 }
 
@@ -25,50 +26,49 @@ test_bind_mount() {
 user = "test"
 group = "plugdev"
 EOF
-	if docker run --rm --entrypoint cat -v "$TESTDIR/test.conf:/etc/tellstick.conf:ro" "$IMAGE" /etc/tellstick.conf 2>/dev/null | grep -q 'user = "test"'; then
+	docker run --rm --entrypoint cat -v "$TESTDIR/test.conf:/etc/tellstick.conf:ro" "$IMAGE" /etc/tellstick.conf > "$TESTDIR/mounted.conf" 2>/dev/null || true
+	if grep -q 'user = "test"' "$TESTDIR/mounted.conf" 2>/dev/null; then
 		echo "PASS"
-		((PASS_COUNT++))
+		((PASS_COUNT++)) || true
 	else
 		echo "FAIL"
-		((FAIL_COUNT++))
+		((FAIL_COUNT++)) || true
 	fi
 }
 
 test_default_daemon() {
 	echo -n "Test: default CMD is telldusd --nodaemon ... "
-	if docker inspect --format='{{.Config.Cmd}}' "$IMAGE" 2>/dev/null | grep -q 'telldusd --nodaemon'; then
+	docker inspect --format='{{.Config.Cmd}}' "$IMAGE" > "$TESTDIR/cmd.txt" 2>/dev/null || true
+	if grep -q 'telldusd --nodaemon' "$TESTDIR/cmd.txt" 2>/dev/null; then
 		echo "PASS"
-		((PASS_COUNT++))
+		((PASS_COUNT++)) || true
 	else
 		echo "FAIL"
-		((FAIL_COUNT++))
+		((FAIL_COUNT++)) || true
 	fi
 }
 
 test_oneshot_tdtool() {
 	echo -n "Test: one-shot tdtool dispatch works ... "
-	if docker run --rm "$IMAGE" tdtool --help 2>/dev/null | grep -q 'tdtool'; then
+	docker run --rm "$IMAGE" tdtool --help > "$TESTDIR/tdtool-help.txt" 2>/dev/null || true
+	if grep -q 'tdtool' "$TESTDIR/tdtool-help.txt" 2>/dev/null; then
 		echo "PASS"
-		((PASS_COUNT++))
+		((PASS_COUNT++)) || true
 	else
 		echo "FAIL"
-		((FAIL_COUNT++))
+		((FAIL_COUNT++)) || true
 	fi
 }
 
 test_no_build_tools() {
 	echo -n "Test: no build tools in final image ... "
-	if docker run --rm --entrypoint sh "$IMAGE" -c "which gcc || which cmake || which g++" 2>/dev/null | grep -q .; then
+	docker run --rm --entrypoint sh "$IMAGE" -c "which gcc || which cmake || which g++" > "$TESTDIR/build-tools.txt" 2>/dev/null || true
+	if [ -s "$TESTDIR/build-tools.txt" ]; then
 		echo "FAIL"
-		((FAIL_COUNT++))
-	elif [ "${PIPESTATUS[0]}" -ne 0 ]; then
-		# which returned non-zero (no build tools found) — this is what we want
-		echo "PASS"
-		((PASS_COUNT++))
+		((FAIL_COUNT++)) || true
 	else
-		# which succeeded but output was empty (unlikely)
 		echo "PASS"
-		((PASS_COUNT++))
+		((PASS_COUNT++)) || true
 	fi
 }
 
