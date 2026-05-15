@@ -107,6 +107,7 @@ int Settings::getNodeId(Node type, int intDeviceIndex) const {
 
 /*
 * Add a new node
+* Writes to stable config — device definitions are persisted in tellstick.conf.
 */
 int Settings::addNode(Node type) {
 	TelldusCore::MutexLocker locker(&mutex);
@@ -203,6 +204,9 @@ void Settings::reloadConfig() {
 	}
 }
 
+/*
+* Writes to var config only — stable config is never modified by state changes.
+*/
 bool Settings::setDeviceState( int intDeviceId, int intDeviceState, const std::wstring &strDeviceStateValue ) {
 	TelldusCore::MutexLocker locker(&mutex);
 	if (d->var_cfg == 0) {
