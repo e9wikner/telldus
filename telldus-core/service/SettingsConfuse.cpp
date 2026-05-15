@@ -26,8 +26,18 @@ public:
 bool readConfig(cfg_t **cfg);
 bool readVarConfig(cfg_t **cfg);
 
-const char* CONFIG_FILE = CONFIG_PATH "/tellstick.conf";
-const char* VAR_CONFIG_FILE = VAR_CONFIG_PATH "/telldus-core.conf";
+static std::string getConfigFilePath() {
+	const char *env = getenv("TELLDUS_CONFIG_FILE");
+	return env ? std::string(env) : std::string(CONFIG_PATH "/tellstick.conf");
+}
+
+static std::string getVarConfigPath() {
+	const char *env = getenv("TELLDUS_STATE_DIR");
+	if (env) {
+		return std::string(env) + "/telldus-core.conf";
+	}
+	return std::string(VAR_CONFIG_PATH "/telldus-core.conf");
+}
 
 /*
 * Constructor
@@ -102,7 +112,7 @@ int Settings::addNode(Node type) {
 	TelldusCore::MutexLocker locker(&mutex);
 	int intNodeId = getNextNodeId(type);
 
-	FILE *fp = fopen(CONFIG_FILE, "we");  // e for setting O_CLOEXEC on the file handle
+	FILE *fp = fopen(getConfigFilePath().c_str(), "we");  // e for setting O_CLOEXEC on the file handle
 	if (!fp) {
 		return TELLSTICK_ERROR_PERMISSION_DENIED;
 	}
@@ -148,7 +158,7 @@ int Settings::getNextNodeId(Node type) const {
 */
 int Settings::removeNode(Node type, int intNodeId) {
 	TelldusCore::MutexLocker locker(&mutex);
-	FILE *fp = fopen(CONFIG_FILE, "we");  // e for setting O_CLOEXEC on the file handle
+	FILE *fp = fopen(getConfigFilePath().c_str(), "we");  // e for setting O_CLOEXEC on the file handle
 	if (!fp) {
 		return TELLSTICK_ERROR_PERMISSION_DENIED;
 	}
@@ -195,7 +205,7 @@ bool Settings::setDeviceState( int intDeviceId, int intDeviceState, const std::w
 			cfg_setint(cfg_device, "state", intDeviceState);
 			cfg_setstr(cfg_device, "stateValue", TelldusCore::wideToString(strDeviceStateValue).c_str());
 
-			FILE *fp = fopen(VAR_CONFIG_FILE, "we");  // e for setting O_CLOEXEC on the file handle
+			FILE *fp = fopen(getVarConfigPath().c_str(), "we");  // e for setting O_CLOEXEC on the file handle
 			if(fp == 0) {
 				return false;
 			}
@@ -205,10 +215,10 @@ bool Settings::setDeviceState( int intDeviceId, int intDeviceState, const std::w
 		}
 	}
 	//  The device is not found in the file, we must create it manualy...
-	FILE *fp = fopen(VAR_CONFIG_FILE, "we");  // e for setting O_CLOEXEC on the file handle
+	FILE *fp = fopen(getVarConfigPath().c_str(), "we");  // e for setting O_CLOEXEC on the file handle
 	if(!fp) {
 		fprintf(stderr, "Failed to write state to %s: %s\n",
-				VAR_CONFIG_FILE, strerror(errno));
+				getVarConfigPath().c_str(), strerror(errno));
 		return false;
 	}
 
@@ -301,7 +311,7 @@ int Settings::setStringSetting(Node type, int intDeviceId, const std::wstring &n
 				return TELLSTICK_ERROR_CONFIG_SYNTAX;
 			}
 			cfg_setstr(p, TelldusCore::wideToString(name).c_str(), newValue.c_str());
-			FILE *fp = fopen(CONFIG_FILE, "we");  // e for setting O_CLOEXEC on the file handle
+			FILE *fp = fopen(getConfigFilePath().c_str(), "we");  // e for setting O_CLOEXEC on the file handle
 			if (!fp) {
 				return TELLSTICK_ERROR_PERMISSION_DENIED;
 			}
@@ -348,7 +358,7 @@ int Settings::setIntSetting(Node type, int intDeviceId, const std::wstring &name
 			} else {
 				cfg_setint(cfg_device, TelldusCore::wideToString(name).c_str(), value);
 			}
-			FILE *fp = fopen(CONFIG_FILE, "we");  // e for setting O_CLOEXEC on the file handle
+			FILE *fp = fopen(getConfigFilePath().c_str(), "we");  // e for setting O_CLOEXEC on the file handle
 			if (!fp) {
 				return TELLSTICK_ERROR_PERMISSION_DENIED;
 			}
@@ -406,16 +416,16 @@ bool readConfig(cfg_t **cfg) {
 		CFG_END()
 	};
 
-	FILE *fp = fopen(CONFIG_FILE, "re");  // e for setting O_CLOEXEC on the file handle
+	FILE *fp = fopen(getConfigFilePath().c_str(), "re");  // e for setting O_CLOEXEC on the file handle
 	if (!fp) {
-		Log::warning("Unable to open config file, %s", CONFIG_FILE);
+		Log::warning("Unable to open config file, %s", getConfigFilePath().c_str());
 		return false;
 	}
 	(*cfg) = cfg_init(opts, CFGF_NOCASE);
 	if (cfg_parse_fp((*cfg), fp) == CFG_PARSE_ERROR) {
 		(*cfg) = 0;
 		fclose(fp);
-		Log::warning("Unable to parse config file, %s", CONFIG_FILE);
+		Log::warning("Unable to parse config file, %s", getConfigFilePath().c_str());
 		return false;
 	}
 
@@ -435,16 +445,16 @@ bool readVarConfig(cfg_t **cfg) {
 		CFG_END()
 	};
 
-	FILE *fp = fopen(VAR_CONFIG_FILE, "re");  // e for setting O_CLOEXEC on the file handle
+	FILE *fp = fopen(getVarConfigPath().c_str(), "re");  // e for setting O_CLOEXEC on the file handle
 	if (!fp) {
-		Log::warning("Unable to open var config file, %s", VAR_CONFIG_FILE);
+		Log::warning("Unable to open var config file, %s", getVarConfigPath().c_str());
 		return false;
 	}
 	(*cfg) = cfg_init(opts, CFGF_NOCASE);
 	if (cfg_parse_fp((*cfg), fp) == CFG_PARSE_ERROR) {
 		(*cfg) = 0;
 		fclose(fp);
-		Log::warning("Unable to parse var config file, %s", VAR_CONFIG_FILE);
+		Log::warning("Unable to parse var config file, %s", getVarConfigPath().c_str());
 		return false;
 	}
 
