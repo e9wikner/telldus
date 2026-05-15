@@ -44,9 +44,14 @@ COPY --from=build /build/build/headless/tdadmin/tdadmin /usr/local/bin/
 # Copy sample config as fallback
 COPY telldus-core/service/tellstick.conf /etc/tellstick.conf
 
+# Copy and install entrypoint script
+COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Update library cache
 RUN ldconfig
 
-# Placeholder entrypoint — refined in Plan 05-02
-ENTRYPOINT ["/usr/bin/tini", "--", "/bin/sh"]
-CMD []
+# tini as PID 1 for signal forwarding and zombie reaping,
+# then delegate to smart dispatch entrypoint
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/docker-entrypoint.sh"]
+CMD ["telldusd", "--nodaemon"]
