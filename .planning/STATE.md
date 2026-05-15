@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-05-14)
 Phase: 08 (Operator Documentation) — COMPLETE
 Plan: 3 of 3 plans executed
 Status: All documentation delivered - README.md, QUICKSTART.md, docs/REPOSITORY.md
-Last activity: 2026-05-15 - Completed quick task 260515-tts: Fix Docker runtime missing libftdi1.so.2 and lsusb
+Last activity: 2026-05-15 - Completed quick task 260515-u32: Fix run-telldus CONFIG_PATH environment override
 
 Progress: [██████████] 100%
 
@@ -124,6 +124,7 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260515-tts | Fix Docker runtime missing libftdi1.so.2 and lsusb | 2026-05-15 | 12318f39 | [260515-tts-fix-docker-runtime-missing-libftdi1-so-2](./quick/260515-tts-fix-docker-runtime-missing-libftdi1-so-2/) |
+| 260515-u32 | Fix run-telldus CONFIG_PATH environment override | 2026-05-15 | c7a30272 | [260515-u32-fix-run-telldus-config-path-environment-](./quick/260515-u32-fix-run-telldus-config-path-environment-/) |
 
 ## Deferred Items
 
