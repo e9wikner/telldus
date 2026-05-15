@@ -9,7 +9,7 @@
 			"cacheVariables": {
 				"FORCE_COMPILE_FROM_TRUNK": "TRUE",
 				"BUILD_TDTOOL": "TRUE",
-				"BUILD_TDADMIN": "FALSE",
+				"BUILD_TDADMIN": "TRUE",
 				"ENABLE_TESTING": "TRUE",
 				"FTDI_ENGINE": "libftdi"
 			}
