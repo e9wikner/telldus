@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 04-02
-last_updated: "2026-05-15T07:10:00.000Z"
+stopped_at: Completed 04-03
+last_updated: "2026-05-15T07:50:00.000Z"
 last_activity: 2026-05-15
 progress:
   total_phases: 8
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 12
-  completed_plans: 11
-  percent: 92
+  completed_plans: 12
+  percent: 100
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-05-14)
 
 ## Current Position
 
-Phase: 04 (Config Compatibility) — EXECUTING
-Plan: 2 of 3 (in progress)
-Status: Ready for next plan
+Phase: 04 (Config Compatibility) — COMPLETE
+Plan: 3 of 3 (complete)
+Status: Phase complete, ready for Phase 05
 Last activity: 2026-05-15
 
-Progress: [█████████░] 92%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Progress: [█████████░] 92%
 | Phase 03-raspberry-pi-portability P03 | 9min | 3 tasks | 4 files |
 | Phase 04-config-compatibility P01 | 22 min | 4 tasks | 3 files |
 | Phase 04-config-compatibility P02 | 33 min | 4 tasks | 8 files |
+| Phase 04-config-compatibility P03 | 35 min | 4 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -91,6 +92,8 @@ Recent decisions affecting current work:
 - 04-02: Debounce config reload with 1-second sleep in watcher thread to avoid reload races during writes
 - 04-02: Inline fillDevices logic in reloadDevices to avoid double-locking device list mutex
 - 04-02: Guard all inotify code with #ifdef _LINUX; build succeeds on non-Linux
+- 04-03: Adapted smoke test to pre-create var config instead of using tdtool --on, because tdtool requires connected TellStick hardware to trigger setDeviceState
+- 04-03: Used inline C helper calling tdAddDevice to test read-only stable config permission errors, since tdtool has no add-device command
 
 ### Pending Todos
 
@@ -114,6 +117,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-15T06:33:29.813Z
+Last session: 2026-05-15T07:32:34.864Z
 Stopped at: Phase 04 context gathered
 Resume file: None

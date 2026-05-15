@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Headless Build Boundary** - Separate the Linux headless target from GUI and legacy platform assumptions (completed 2026-05-14)
 - [x] **Phase 2: Arch Native Build** - Build and test the headless components on the local Arch Linux machine (completed 2026-05-14)
 - [x] **Phase 3: Raspberry Pi Portability** - Prove the same headless build path for Debian/Raspberry Pi `aarch64` (completed 2026-05-14)
-- [ ] **Phase 4: Config Compatibility** - Preserve existing `tellstick.conf` behavior and state separation
+- [x] **Phase 4: Config Compatibility** - Preserve existing `tellstick.conf` behavior and state separation (completed 2026-05-15)
 - [ ] **Phase 5: Docker Image and Config Mount** - Build a minimal container image with `/etc/tellstick.conf` bind-mount support
 - [ ] **Phase 6: Containerized Daemon Runtime** - Run `telldusd` and `tdtool` in Docker with restart-safe behavior
 - [ ] **Phase 7: TellStick Duo Hardware Verification** - Validate USB detection, device commands, dimming, and receive paths
@@ -95,7 +95,7 @@ Plans:
 Plans:
 - [x] 04-01: Trace Linux config and state file paths in the service
 - [x] 04-02: Validate existing config loading against a user-provided sample
-- [ ] 04-03: Preserve config/state separation across restart scenarios
+- [x] 04-03: Preserve config/state separation across restart scenarios (completed 2026-05-15)
 
 ### Phase 5: Docker Image and Config Mount
 **Goal**: A minimal Docker image builds and accepts a bind-mounted `/etc/tellstick.conf`.
@@ -174,7 +174,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 1. Headless Build Boundary | 3/3 | Complete | 2026-05-14 |
 | 2. Arch Native Build | 3/3 | Complete | 2026-05-14 |
 | 3. Raspberry Pi Portability | 3/3 | Complete   | 2026-05-14 |
-| 4. Config Compatibility | 2/3 | In Progress | - |
+| 4. Config Compatibility | 3/3 | Complete | 2026-05-15 |
 | 5. Docker Image and Config Mount | 0/3 | Not started | - |
 | 6. Containerized Daemon Runtime | 0/4 | Not started | - |
 | 7. TellStick Duo Hardware Verification | 0/4 | Not started | - |
