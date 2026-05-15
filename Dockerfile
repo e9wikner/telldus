@@ -29,10 +29,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install runtime libraries only
 RUN apt-get update -qq && apt-get install -y -q --no-install-recommends \
-	libftdi1 \
+	libftdi1-2 \
 	libconfuse2 \
 	libusb-1.0-0 \
 	tini \
+	usbutils \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Copy artifacts from build stage
