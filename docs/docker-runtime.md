@@ -365,6 +365,160 @@ docker run -d --name telldus --privileged \
   telldus:latest
 ```
 
+## Restart Behavior
+
+This section documents how the Telldus container handles restarts, state persistence, and recovery scenarios. Understanding these behaviors ensures reliable operation in production deployments.
+
+### Container Restart Persistence
+
+When a container restarts, all runtime state is preserved through the mounted volume at `/var/lib/telldus`:
+
+**What persists:**
+- Device on/off/dim states (stored in `telldus-core.conf`)
+- Last known sensor readings
+- Controller connection status
+- Daemon configuration and device list
+
+**What does NOT persist:**
+- In-flight commands (graceful shutdown waits for completion)
+- Temporary socket files (recreated on startup)
+- Process memory state (daemon restarts fresh)
+
+**Verification:**
+```bash
+# Before restart
+docker exec telldus tdtool --list
+
+# Restart container
+docker restart telldus
+
+# After restart (wait 3 seconds for daemon ready)
+sleep 3
+docker exec telldus tdtool --list
+
+# Compare: device states should match
+```
+
+**Implementation details:**
+- State is written to `/var/lib/telldus/telldus-core.conf` on every device state change
+- Volume mount `-v telldus-state:/var/lib/telldus` ensures persistence
+- Daemon reads state file on startup to restore previous device states
+- Per decision D-06-12: State persistence is ensured by Phase 4 implementation
+
+### Config Auto-Reload (Phase 4)
+
+The daemon supports **hot config reload** via inotify, implemented in Phase 4. Configuration changes apply without requiring container restart.
+
+**How it works:**
+1. Edit `/path/to/your/tellstick.conf` on the host
+2. Save the file (triggers `IN_CLOSE_WRITE` or `IN_MOVED_TO` event)
+3. inotify watcher detects the change (1-second debounce)
+4. Daemon reloads device configuration
+5. New devices immediately appear in `tdtool --list`
+
+**Benefits:**
+- No container restart needed for config changes
+- Zero downtime when adding/removing devices
+- Immediate application of protocol or timing changes
+
+**Verification:**
+```bash
+# Add a device to config, then save
+echo 'device { ... }' >> /path/to/your/tellstick.conf
+
+# Check that new device appears (within 1-2 seconds)
+docker exec telldus tdtool --list
+```
+
+**Note:** The var config (`telldus-core.conf`) does NOT auto-reload — it is internal state managed by the daemon.
+
+### USB Disconnect Recovery
+
+The container survives temporary USB disconnections through libftdi's internal retry mechanism (per decision D-06-11).
+
+**Behavior:**
+- When USB disconnects: libftdi returns errors, daemon sleeps 1s, retries
+- When USB reconnects: libftdi auto-reopens device on next operation
+- Container continues running — no restart required
+- State is preserved throughout the disconnect period
+
+**Warning signs in logs:**
+```
+Broken pipe on read
+Failed to read from device
+```
+
+These messages indicate USB issues but the daemon continues retrying indefinitely.
+
+**Recovery verification:**
+```bash
+# Check daemon is still running after USB issue
+docker ps | grep telldus
+
+# Verify TellStick is detected again
+docker exec telldus lsusb | grep -i ftdi
+
+# Test device control
+docker exec telldus tdtool --on 1
+```
+
+**Note:** Unlike some USB devices, TellStick Duo does not require container restart after reconnection. The daemon's resilience ensures continuous operation.
+
+### Restart Policy Behavior
+
+The recommended restart policy is `unless-stopped` (per decision D-06-10), which provides auto-recovery while respecting manual operator control.
+
+**Policy comparison:**
+
+| Policy | Daemon Crash | Host Reboot | Manual `docker stop` |
+|--------|--------------|-------------|---------------------|
+| `unless-stopped` | ✓ Restarts | ✓ Restarts | ✗ Stays stopped |
+| `always` | ✓ Restarts | ✓ Restarts | ✓ Restarts (ignores manual stop) |
+| `on-failure` | ✓ Restarts | ✗ Stays stopped | ✗ Stays stopped |
+| `no` | ✗ Stays stopped | ✗ Stays stopped | ✗ Stays stopped |
+
+**Why `unless-stopped`:**
+- **Auto-recovery:** Container restarts after daemon crashes or host reboots
+- **Operator control:** Respects intentional `docker stop` commands
+- **Prevents loops:** If daemon crashes immediately, operator can investigate
+
+**Docker run with restart policy:**
+```bash
+docker run -d \
+  --name telldus \
+  --privileged \
+  --restart unless-stopped \
+  -v /path/to/your/tellstick.conf:/etc/tellstick.conf:ro \
+  -v telldus-state:/var/lib/telldus \
+  telldus:latest
+```
+
+**Docker Compose with restart policy:**
+```yaml
+services:
+  telldus:
+    image: telldus:latest
+    container_name: telldus
+    privileged: true
+    restart: unless-stopped
+    volumes:
+      - /path/to/your/tellstick.conf:/etc/tellstick.conf:ro
+      - telldus-state:/var/lib/telldus
+
+volumes:
+  telldus-state:
+```
+
+**Restart verification:**
+```bash
+# Check restart policy
+docker inspect telldus --format='{{.HostConfig.RestartPolicy.Name}}'
+# Output: unless-stopped
+
+# View restart count (should be 0 under normal operation)
+docker inspect telldus --format='{{.RestartCount}}'
+```
+
 ### State Persistence
 
 Runtime state is preserved across container restarts when using a volume:
