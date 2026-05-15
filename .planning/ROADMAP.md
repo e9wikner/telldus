@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Docker Image and Config Mount** - Build a minimal container image with `/etc/tellstick.conf` bind-mount support (completed 2026-05-15)
 - [x] **Phase 6: Containerized Daemon Runtime** - Run `telldusd` and `tdtool` in Docker with restart-safe behavior
 - [x] **Phase 7: TellStick Duo Hardware Verification** - Validate USB detection, device commands, dimming, and receive paths (completed 2026-05-15)
-- [ ] **Phase 8: Operator Documentation** - Produce final native, Docker, and verification documentation
+- [x] **Phase 8: Operator Documentation** - Produce final native, Docker, and verification documentation (completed 2026-05-15)
 
 ## Phase Details
 
@@ -170,7 +170,7 @@ Plans:
 Plans:
 - [x] 08-01: Create comprehensive README.md with native and Docker workflows (completed 2026-05-15)
 - [x] 08-02: Create ultra-terse QUICKSTART.md with copy-paste commands for Docker and native workflows (completed 2026-05-15)
-- [ ] 08-03: Document Docker operation, exclusions, and next MQTT milestone
+- [x] 08-03: Document Docker operation, exclusions, and next MQTT milestone (completed 2026-05-15)
 
 ## Progress
 
@@ -186,4 +186,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 5. Docker Image and Config Mount | 3/3 | Complete | 2026-05-15 |
 | 6. Containerized Daemon Runtime | 4/4 | Complete | 2026-05-15 |
 | 7. TellStick Duo Hardware Verification | 4/4 | Complete | 2026-05-15 |
-| 8. Operator Documentation | 2/3 | In Progress | 2026-05-15 |
+| 8. Operator Documentation | 3/3 | Complete | 2026-05-15 |
