@@ -168,7 +168,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 08-01: Document native Arch Linux build and test workflow
+- [x] 08-01: Create comprehensive README.md with native and Docker workflows (completed 2026-05-15)
 - [ ] 08-02: Document Raspberry Pi OS/Debian `aarch64` build and runtime workflow
 - [ ] 08-03: Document Docker operation, exclusions, and next MQTT milestone
 
@@ -186,4 +186,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 5. Docker Image and Config Mount | 3/3 | Complete | 2026-05-15 |
 | 6. Containerized Daemon Runtime | 4/4 | Complete | 2026-05-15 |
 | 7. TellStick Duo Hardware Verification | 4/4 | Complete | 2026-05-15 |
-| 8. Operator Documentation | 0/3 | Not started | - |
+| 8. Operator Documentation | 1/3 | In Progress | 2026-05-15 |
