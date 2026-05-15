@@ -429,6 +429,93 @@ docker exec telldus lsusb
 
 **Solution:** Ensure container started with `--privileged`
 
+### Failed to open TellStick
+
+**Symptom:** Logs show `Failed to open TellStick` error
+
+**Cause:** USB device access issue - container lacks permissions to open the FTDI device
+
+**Diagnosis:**
+```bash
+# Check if FTDI device is visible
+docker exec telldus lsusb | grep -i ftdi
+
+# Check container privileges
+docker inspect telldus --format='{{.HostConfig.Privileged}}'
+# Should show: true
+```
+
+**Common causes:**
+- Missing `--privileged` flag on `docker run`
+- TellStick physically disconnected
+- USB port/cable issue
+- Another process has device open
+
+**Solution:**
+```bash
+# 1. Stop and remove existing container
+docker stop telldus && docker rm telldus
+
+# 2. Re-run with --privileged flag
+docker run -d \
+  --name telldus \
+  --privileged \
+  -v /path/to/your/tellstick.conf:/etc/tellstick.conf:ro \
+  -v telldus-state:/var/lib/telldus \
+  telldus:latest
+
+# 3. Verify USB access
+docker exec telldus lsusb | grep -i ftdi
+```
+
+### No Devices Listed
+
+**Symptom:** `tdtool --list` shows `Number of devices: 0` or no devices
+
+**Cause:** Config file not mounted correctly or syntax errors
+
+**Diagnosis:**
+```bash
+# Check if config file is accessible in container
+docker exec telldus cat /etc/tellstick.conf
+
+# Check config file permissions on host
+ls -la /path/to/your/tellstick.conf
+
+# View logs for config parsing errors
+docker logs telldus | grep -i "config\|device"
+```
+
+**Common causes:**
+- Config file path incorrect in bind mount
+- Config file permissions not readable
+- Syntax errors in tellstick.conf
+- Config file not on host filesystem
+
+**Solution:**
+```bash
+# 1. Verify config file exists on host
+ls -la /path/to/your/tellstick.conf
+
+# 2. Check file permissions (should be readable)
+chmod 644 /path/to/your/tellstick.conf
+
+# 3. Validate config syntax (basic check)
+grep -E '^device|^controller' /path/to/your/tellstick.conf
+
+# 4. Recreate container with correct path
+docker stop telldus && docker rm telldus
+docker run -d \
+  --name telldus \
+  --privileged \
+  -v /path/to/your/tellstick.conf:/etc/tellstick.conf:ro \
+  -v telldus-state:/var/lib/telldus \
+  telldus:latest
+
+# 5. Verify devices loaded
+docker exec telldus tdtool --list
+```
+
 ### tdtool Connection Failed
 
 **Symptom:** `docker exec telldus tdtool --list` returns:
