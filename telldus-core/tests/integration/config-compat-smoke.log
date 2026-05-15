@@ -1,0 +1,25 @@
+=== Starting telldusd ===
+telldusd daemon starting up
+Unable to open var config file, /tmp/tmp.asVsrRkCVk/telldus-core.conf
+Unable to open var config file, /tmp/tmp.asVsrRkCVk/telldus-core.conf
+Config auto-reload enabled for /tmp/tmp.asVsrRkCVk/tellstick.conf
+=== Listing devices (initial) ===
+type=device	id=1	name=Living room lamp	lastsentcommand=OFF
+type=device	id=2	name=Bedroom dimmer	lastsentcommand=OFF
+type=device	id=3	name=Outdoor switch	lastsentcommand=OFF
+PASS: All 3 initial devices found
+=== Adding new device to config ===
+=== Waiting for auto-reload (3s) ===
+Config file changed, reloading devices
+=== Listing devices (after reload) ===
+type=device	id=1	name=Living room lamp	lastsentcommand=OFF
+type=device	id=2	name=Bedroom dimmer	lastsentcommand=OFF
+type=device	id=3	name=Outdoor switch	lastsentcommand=OFF
+type=device	id=4	name=New reload test device	lastsentcommand=OFF
+PASS: New device found after auto-reload
+PASS: All 4 devices present after reload
+
+=== ALL TESTS PASSED ===
+Received SIGTERM or SIGINT signal.
+Shutting down
+telldusd daemon exited

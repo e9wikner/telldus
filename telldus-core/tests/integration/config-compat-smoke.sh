@@ -5,8 +5,12 @@ set -euo pipefail
 # Validates config parsing, path overrides, and auto-reload
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TELLDUS_CORE_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-BUILD_DIR="${TELLDUS_CORE_DIR}/build/headless"
+# Build directory may be at repo root or under telldus-core/
+if [ -d "${SCRIPT_DIR}/../../../build/headless" ]; then
+	BUILD_DIR="$(cd "${SCRIPT_DIR}/../../../build/headless" && pwd)"
+else
+	BUILD_DIR="$(cd "${SCRIPT_DIR}/../../build/headless" && pwd)"
+fi
 DAEMON="${BUILD_DIR}/service/telldusd"
 TDTOOL="${BUILD_DIR}/tdtool/tdtool"
 SAMPLE_CONF="${SCRIPT_DIR}/sample-tellstick.conf"

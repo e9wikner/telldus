@@ -130,7 +130,24 @@ void DeviceManager::reloadDevices() {
 	}
 	d->devices.clear();
 	d->set.reloadConfig();
-	fillDevices();
+
+	int numberOfDevices = d->set.getNumberOfNodes(Settings::Device);
+	for (int i = 0; i < numberOfDevices; ++i) {
+		int id = d->set.getNodeId(Settings::Device, i);
+		d->devices[id] = new Device(id);
+		d->devices[id]->setName(d->set.getName(Settings::Device, id));
+		d->devices[id]->setModel(d->set.getModel(id));
+		d->devices[id]->setProtocolName(d->set.getProtocol(id));
+		d->devices[id]->setPreferredControllerId(d->set.getPreferredControllerId(id));
+		d->devices[id]->setLastSentCommand(d->set.getDeviceState(id), d->set.getDeviceStateValue(id));
+		d->devices[id]->setParameter(L"house", d->set.getDeviceParameter(id, L"house"));
+		d->devices[id]->setParameter(L"unit", d->set.getDeviceParameter(id, L"unit"));
+		d->devices[id]->setParameter(L"code", d->set.getDeviceParameter(id, L"code"));
+		d->devices[id]->setParameter(L"units", d->set.getDeviceParameter(id, L"units"));
+		d->devices[id]->setParameter(L"fade", d->set.getDeviceParameter(id, L"fade"));
+		d->devices[id]->setParameter(L"system", d->set.getDeviceParameter(id, L"system"));
+		d->devices[id]->setParameter(L"devices", d->set.getDeviceParameter(id, L"devices"));
+	}
 }
 
 void DeviceManager::fillDevices() {
