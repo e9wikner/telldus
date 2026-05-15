@@ -218,6 +218,99 @@ docker-compose logs --tail 50
 docker-compose exec telldus tdtool --list
 ```
 
+## Using tdtool
+
+The `tdtool` command provides device control and status information. When running Telldus in a Docker container, use the `docker exec` pattern to execute tdtool commands inside the container.
+
+### Primary Pattern: docker exec
+
+The recommended way to use tdtool with a containerized daemon is via `docker exec`:
+
+```bash
+docker exec telldus tdtool --list
+```
+
+This pattern is cleaner than bind-mounting Unix sockets to the host because:
+- **No socket path coordination** - Sockets remain container-local at `/tmp/TelldusClient`
+- **No host dependencies** - Host doesn't need telldus-core library installed
+- **Container-native** - Follows Docker best practices for sidecar tooling
+- **Consistent behavior** - Works identically across all host platforms
+
+Per decision D-06-04, this is the primary v1 communication method. Socket bind-mount to host is deferred to v2.
+
+### Common Commands
+
+**List all devices and sensors:**
+```bash
+docker exec telldus tdtool --list
+```
+
+**Turn on a device (by ID or name):**
+```bash
+docker exec telldus tdtool --on 1
+docker exec telldus tdtool --on Livingroom
+```
+
+**Turn off a device (by ID or name):**
+```bash
+docker exec telldus tdtool --off 1
+docker exec telldus tdtool --off Livingroom
+```
+
+**Dim a device:**
+```bash
+docker exec telldus tdtool --dimlevel 128 --dim 1
+```
+
+**Send bell command:**
+```bash
+docker exec telldus tdtool --bell 1
+```
+
+**List only devices (key=value format):**
+```bash
+docker exec telldus tdtool --list-devices
+```
+
+**List only sensors (key=value format):**
+```bash
+docker exec telldus tdtool --list-sensors
+```
+
+### Why Host tdtool Doesn't Work
+
+Running `tdtool --list` directly on the host will fail with:
+```
+Could not connect to the Telldus Service
+```
+
+This happens because:
+1. Host tdtool looks for Unix socket at `/tmp/TelldusClient`
+2. The container's daemon creates sockets inside the container namespace
+3. These sockets are not visible on the host filesystem
+
+**Solution:** Always use `docker exec telldus tdtool <args>`
+
+### Shell Aliases for Convenience
+
+Add to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+alias tdtool='docker exec telldus tdtool'
+```
+
+Then use tdtool as if it were installed locally:
+```bash
+tdtool --list
+tdtool --on 1
+tdtool --off Livingroom
+```
+
+For docker-compose deployments:
+```bash
+alias tdtool='docker-compose exec telldus tdtool'
+```
+
 ## Shutdown Procedure
 
 ### Graceful Shutdown
