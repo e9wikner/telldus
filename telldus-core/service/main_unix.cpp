@@ -17,6 +17,7 @@
 
 #include "service/TelldusMain.h"
 #include "service/Settings.h"
+#include "service/config.h"
 #include "common/Strings.h"
 #include "service/Log.h"
 
