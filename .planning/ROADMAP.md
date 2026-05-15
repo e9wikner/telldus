@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Raspberry Pi Portability** - Prove the same headless build path for Debian/Raspberry Pi `aarch64` (completed 2026-05-14)
 - [x] **Phase 4: Config Compatibility** - Preserve existing `tellstick.conf` behavior and state separation (completed 2026-05-15)
 - [x] **Phase 5: Docker Image and Config Mount** - Build a minimal container image with `/etc/tellstick.conf` bind-mount support (completed 2026-05-15)
-- [ ] **Phase 6: Containerized Daemon Runtime** - Run `telldusd` and `tdtool` in Docker with restart-safe behavior
+- [x] **Phase 6: Containerized Daemon Runtime** - Run `telldusd` and `tdtool` in Docker with restart-safe behavior
 - [ ] **Phase 7: TellStick Duo Hardware Verification** - Validate USB detection, device commands, dimming, and receive paths
 - [ ] **Phase 8: Operator Documentation** - Produce final native, Docker, and verification documentation
 
@@ -125,10 +125,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 06-01: Define Docker run options for USB passthrough and service permissions
-- [ ] 06-02: Run `telldusd` as the container main process
-- [ ] 06-03: Verify `tdtool` communication inside or against the container
-- [ ] 06-04: Test daemon/container restart behavior
+- [x] 06-01: Define Docker run options for USB passthrough and service permissions
+- [x] 06-02: Run `telldusd` as the container main process
+- [x] 06-03: Verify `tdtool` communication inside or against the container
+- [x] 06-04: Test daemon/container restart behavior
 
 ### Phase 7: TellStick Duo Hardware Verification
 **Goal**: The modernized runtime controls and observes the real TellStick Duo setup.
@@ -176,6 +176,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 3. Raspberry Pi Portability | 3/3 | Complete   | 2026-05-14 |
 | 4. Config Compatibility | 3/3 | Complete | 2026-05-15 |
 | 5. Docker Image and Config Mount | 3/3 | Complete | 2026-05-15 |
-| 6. Containerized Daemon Runtime | 0/4 | Not started | - |
+| 6. Containerized Daemon Runtime | 4/4 | Complete | 2026-05-15 |
 | 7. TellStick Duo Hardware Verification | 0/4 | Not started | - |
 | 8. Operator Documentation | 0/3 | Not started | - |
