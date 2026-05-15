@@ -110,7 +110,7 @@ Plans:
 
 Plans:
 - [x] 05-01-PLAN.md — Add Docker build for headless runtime components
-- [ ] 05-02-PLAN.md — Wire container entrypoint/config path behavior
+- [x] 05-02-PLAN.md — Wire container entrypoint/config path behavior
 - [ ] 05-03-PLAN.md — Validate config bind mount and image contents
 
 ### Phase 6: Containerized Daemon Runtime

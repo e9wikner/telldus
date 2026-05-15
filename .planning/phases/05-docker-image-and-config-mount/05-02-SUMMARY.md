@@ -95,6 +95,16 @@ None - no external service configuration required.
 - The smart entrypoint and Dockerfile wiring are complete and verified
 - No blockers for downstream containerized daemon runtime work in Phase 6
 
+## Self-Check: PASSED
+
+- [x] `05-02-SUMMARY.md` exists on disk
+- [x] `scripts/docker-entrypoint.sh` exists on disk
+- [x] `Dockerfile` exists on disk
+- [x] Commit `809c7a1` (Task 1) exists in git history
+- [x] Commit `acaf050` (Task 2) exists in git history
+- [x] Commit `7691c73` (SUMMARY.md) exists in git history
+- [x] Commit `0567e20` (metadata) exists in git history
+
 ---
 *Phase: 05-docker-image-and-config-mount*
 *Completed: 2026-05-15*

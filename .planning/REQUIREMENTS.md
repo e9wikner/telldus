@@ -18,7 +18,7 @@ Requirements for the initial release. Each maps to roadmap phases.
 
 - [x] **DOCK-01**: Developer can build a Docker image that contains only the Linux headless runtime components and their required runtime dependencies
 - [ ] **DOCK-02**: Operator can run `telldusd` in a container with a host TellStick Duo passed through to the container
-- [ ] **DOCK-03**: Operator can bind-mount an existing config file into the container as `/etc/tellstick.conf`
+- [x] **DOCK-03**: Operator can bind-mount an existing config file into the container as `/etc/tellstick.conf`
 - [ ] **DOCK-04**: Operator can use `tdtool` against the containerized daemon for device listing and command verification
 - [ ] **DOCK-05**: Container startup and restart preserve the expected config and runtime behavior without requiring device re-learning
 
@@ -36,7 +36,7 @@ Requirements for the initial release. Each maps to roadmap phases.
 
 - [x] **CONF-01**: Existing `tellstick.conf` files remain compatible with the modernized Linux runtime
 - [x] **CONF-02**: Runtime state remains separate from the user-provided `tellstick.conf`
-- [ ] **CONF-03**: Documentation explains exactly how to provide the existing config for native and Docker runs
+- [x] **CONF-03**: Documentation explains exactly how to provide the existing config for native and Docker runs
 - [ ] **CONF-04**: No v1 workflow requires re-pairing, re-learning, or editing every existing 433 MHz device
 
 ### Documentation and Operations
@@ -92,7 +92,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NBLD-04 | Phase 2 | Pending |
 | DOCK-01 | Phase 5 | Complete |
 | DOCK-02 | Phase 6 | Pending |
-| DOCK-03 | Phase 5 | Pending |
+| DOCK-03 | Phase 5 | Complete |
 | DOCK-04 | Phase 6 | Pending |
 | DOCK-05 | Phase 6 | Pending |
 | DUO-01 | Phase 7 | Pending |
@@ -104,7 +104,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DUO-07 | Phase 6 | Pending |
 | CONF-01 | Phase 4 | Complete |
 | CONF-02 | Phase 4 | Complete |
-| CONF-03 | Phase 5 | Pending |
+| CONF-03 | Phase 5 | Complete |
 | CONF-04 | Phase 4 | Pending |
 | DOCS-01 | Phase 8 | Pending |
 | DOCS-02 | Phase 8 | Pending |

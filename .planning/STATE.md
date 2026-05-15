@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 05 context gathered
-last_updated: "2026-05-15T10:06:01Z"
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-05-15T10:16:46.840Z"
 last_activity: 2026-05-15
 progress:
   total_phases: 8
   completed_phases: 4
   total_plans: 15
-  completed_plans: 13
-  percent: 87
+  completed_plans: 14
+  percent: 93
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-05-14)
 ## Current Position
 
 Phase: 05 (Docker Image and Config Mount) — IN PROGRESS
-Plan: 1 of 3 complete
+Plan: 2 of 3 complete
 Status: Ready to execute
 Last activity: 2026-05-15
 
-Progress: [█████████░] 87%
+Progress: [█████████░] 93%
 
 ## Performance Metrics
 
@@ -59,6 +59,7 @@ Progress: [█████████░] 87%
 | Phase 04-config-compatibility P01 | 22 min | 4 tasks | 3 files |
 | Phase 04-config-compatibility P02 | 33 min | 4 tasks | 8 files |
 | Phase 04-config-compatibility P03 | 35 min | 4 tasks | 3 files |
+| Phase 05-docker-image-and-config-mount P02 | 3min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,7 @@ Recent decisions affecting current work:
 - 04-03: Adapted smoke test to pre-create var config instead of using tdtool --on, because tdtool requires connected TellStick hardware to trigger setDeviceState
 - 04-03: Used inline C helper calling tdAddDevice to test read-only stable config permission errors, since tdtool has no add-device command
 - 05-01: libconfuse2 (not libconfuse0) is the correct Debian bookworm runtime package name for libconfuse
+- [Phase 05-docker-image-and-config-mount]: Use separate if blocks for tdtool and tdadmin dispatch to satisfy exact-string-match security model — Separate if blocks make the dispatch logic explicit and auditable, aligning with the threat model's exact-string-match mitigation for T-05-02-01
 
 ### Pending Todos
 
@@ -118,6 +120,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-15T10:06:01Z
+Last session: 2026-05-15T10:16:27.423Z
 Stopped at: Completed 05-01-PLAN.md
 Resume file: None
