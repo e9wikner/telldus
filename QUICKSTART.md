@@ -10,7 +10,7 @@ Copy-paste commands only. For explanations and troubleshooting, see [README.md](
 # Build image
 ./scripts/build-docker.sh --load
 
-# Run with helper script (edit CONFIG_PATH first)
+# Run with helper script
 CONFIG_PATH=/path/to/your/tellstick.conf ./scripts/run-telldus.sh
 
 # Or run manually

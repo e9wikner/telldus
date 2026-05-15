@@ -13,15 +13,15 @@
 #   - Config file must exist at the path you specify
 #
 # USAGE:
-#   1. Edit the CONFIG_PATH variable below to point to your tellstick.conf
-#   2. Run: ./scripts/run-telldus.sh
+#   1. Set CONFIG_PATH to point to your tellstick.conf
+#   2. Run: CONFIG_PATH=/path/to/tellstick.conf ./scripts/run-telldus.sh
 #   3. Verify: docker exec telldus tdtool --list
 #
 # EXAMPLE:
 #   # With custom config path
 #   CONFIG_PATH=/home/pi/tellstick.conf ./scripts/run-telldus.sh
 #
-#   # Or edit this file and change the default CONFIG_PATH
+#   # Or edit this file and change the fallback CONFIG_PATH
 #
 # VERIFICATION COMMANDS:
 #   docker ps | grep telldus          # Check container is running
@@ -41,15 +41,17 @@
 #   the container is removed.
 #
 
-# CONFIGURATION - CHANGE THIS PATH TO YOUR ACTUAL CONFIG FILE
-# This should point to your existing tellstick.conf on the host
-CONFIG_PATH="/path/to/your/tellstick.conf"
+# CONFIGURATION
+# CONFIG_PATH should point to your existing tellstick.conf on the host.
+# Prefer passing it as an environment variable:
+#   CONFIG_PATH=/path/to/tellstick.conf ./scripts/run-telldus.sh
+CONFIG_PATH="${CONFIG_PATH:-/path/to/your/tellstick.conf}"
 
 # Verify config file exists
 if [ ! -f "$CONFIG_PATH" ]; then
     echo "ERROR: Config file not found at: $CONFIG_PATH"
-    echo "Please edit this script and set CONFIG_PATH to your tellstick.conf"
-    echo "Example: CONFIG_PATH=/etc/tellstick.conf"
+    echo "Set CONFIG_PATH to your tellstick.conf path."
+    echo "Example: CONFIG_PATH=/etc/tellstick.conf ./scripts/run-telldus.sh"
     exit 1
 fi
 
