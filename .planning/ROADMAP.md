@@ -169,7 +169,7 @@ Plans:
 
 Plans:
 - [x] 08-01: Create comprehensive README.md with native and Docker workflows (completed 2026-05-15)
-- [ ] 08-02: Document Raspberry Pi OS/Debian `aarch64` build and runtime workflow
+- [x] 08-02: Create ultra-terse QUICKSTART.md with copy-paste commands for Docker and native workflows (completed 2026-05-15)
 - [ ] 08-03: Document Docker operation, exclusions, and next MQTT milestone
 
 ## Progress
@@ -186,4 +186,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 5. Docker Image and Config Mount | 3/3 | Complete | 2026-05-15 |
 | 6. Containerized Daemon Runtime | 4/4 | Complete | 2026-05-15 |
 | 7. TellStick Duo Hardware Verification | 4/4 | Complete | 2026-05-15 |
-| 8. Operator Documentation | 1/3 | In Progress | 2026-05-15 |
+| 8. Operator Documentation | 2/3 | In Progress | 2026-05-15 |
