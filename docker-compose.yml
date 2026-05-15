@@ -1,0 +1,55 @@
+# Docker Compose configuration for Telldus Core daemon
+# Phase 06: Containerized Daemon Runtime
+#
+# This file defines the deployment configuration for running telldusd
+# in a Docker container with TellStick Duo USB passthrough support.
+#
+# Key design decisions (from 06-RESEARCH.md):
+# - D-06-01: --privileged mode is REQUIRED for USB passthrough
+#   Without privileged mode, the container cannot access the TellStick Duo
+# - D-06-10: restart: unless-stopped provides auto-recovery from crashes
+#   and host reboots, but respects manual 'docker-compose down'
+# - D-06-12: Named volume for /var/lib/telldus ensures state persistence
+#   across container recreation (device states, learned devices)
+#
+# Usage:
+#   docker-compose up -d          # Start the daemon
+#   docker-compose exec telldus tdtool --list  # List devices
+#   docker-compose logs -f        # Follow logs
+#   docker-compose down           # Stop the daemon
+#
+# USB Verification:
+#   docker-compose exec telldus lsusb | grep -i ftdi
+#
+version: '3.8'
+
+services:
+  telldus:
+    image: telldus:latest
+    container_name: telldus
+    # --privileged is REQUIRED for TellStick Duo USB access (D-06-01)
+    # Without this, libftdi1 cannot access /dev/ttyUSB* devices
+    privileged: true
+    # Auto-recovery from crashes and host reboots (D-06-10)
+    # Stays down if manually stopped with 'docker-compose down'
+    restart: unless-stopped
+    volumes:
+      # Host config file mounted read-only (D-06-03)
+      # Replace /path/to/your/tellstick.conf with actual path on your host
+      - /path/to/your/tellstick.conf:/etc/tellstick.conf:ro
+      # Named volume for runtime state persistence (D-06-12)
+      # Stores device states and learned devices across container restarts
+      - telldus-state:/var/lib/telldus
+    # Optional: Limit container resources
+    # Telldus daemon is lightweight; 64M memory and 25% CPU is ample
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.25'
+
+volumes:
+  # Named volume for persistent state (D-06-12)
+  # Using local driver (default) for standalone deployments
+  telldus-state:
+    driver: local
