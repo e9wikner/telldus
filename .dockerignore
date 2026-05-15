@@ -1,0 +1,15 @@
+.planning/
+.git/
+build/
+qtcreator-build/
+Doxyfile
+html/
+latex/
+CMakeLists.txt.user
+*.pyc
+.local/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
