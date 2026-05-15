@@ -102,7 +102,7 @@ IF (UNIX AND NOT APPLE)
 	IF (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
 		SET(DEFAULT_STATE_INSTALL_DIR "/var/spool")
 	ELSE ()
-		SET(DEFAULT_STATE_INSTALL_DIR "/var/state")
+		SET(DEFAULT_STATE_INSTALL_DIR "/var/lib/telldus")
 	ENDIF ()
 	SET(STATE_INSTALL_DIR "${DEFAULT_STATE_INSTALL_DIR}" CACHE PATH "The directory to store state information of the devices")
 
