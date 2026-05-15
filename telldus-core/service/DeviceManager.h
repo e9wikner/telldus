@@ -51,6 +51,7 @@ public:
 	std::wstring getSensorValue(const std::wstring &protocol, const std::wstring &model, int id, int dataType) const;
 
 	void handleControllerMessage(const ControllerEventData &event);
+	void reloadDevices();
 
 private:
 	void handleSensorMessage(const ControllerMessage &msg);

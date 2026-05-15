@@ -42,6 +42,8 @@ public:
 	int getControllerType(int intControllerId) const;
 	int setControllerType(int intControllerId, int type);
 
+	void reloadConfig();
+
 protected:
 	std::wstring getStringSetting(Node type, int intNodeId, const std::wstring &name, bool parameter) const;
 	int setStringSetting(Node type, int intDeviceId, const std::wstring &name, const std::wstring &value, bool parameter);

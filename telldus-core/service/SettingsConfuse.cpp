@@ -192,6 +192,17 @@ int Settings::removeNode(Node type, int intNodeId) {
 	return TELLSTICK_SUCCESS;
 }
 
+void Settings::reloadConfig() {
+	TelldusCore::MutexLocker locker(&mutex);
+	if (d->cfg != 0) {
+		cfg_free(d->cfg);
+		d->cfg = NULL;
+	}
+	if (!readConfig(&d->cfg)) {
+		Log::warning("Failed to reload config file, keeping previous configuration");
+	}
+}
+
 bool Settings::setDeviceState( int intDeviceId, int intDeviceState, const std::wstring &strDeviceStateValue ) {
 	TelldusCore::MutexLocker locker(&mutex);
 	if (d->var_cfg == 0) {

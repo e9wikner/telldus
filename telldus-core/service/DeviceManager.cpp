@@ -123,6 +123,16 @@ void DeviceManager::setExecuteActionEvent(TelldusCore::EventRef event) {
 	d->executeActionEvent = event;
 }
 
+void DeviceManager::reloadDevices() {
+	TelldusCore::MutexLocker deviceListLocker(&d->lock);
+	for (DeviceMap::iterator it = d->devices.begin(); it != d->devices.end(); ++it) {
+		delete it->second;
+	}
+	d->devices.clear();
+	d->set.reloadConfig();
+	fillDevices();
+}
+
 void DeviceManager::fillDevices() {
 	int numberOfDevices = d->set.getNumberOfNodes(Settings::Device);
 	TelldusCore::MutexLocker deviceListLocker(&d->lock);
