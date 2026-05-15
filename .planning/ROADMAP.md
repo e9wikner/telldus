@@ -94,7 +94,7 @@ Plans:
 
 Plans:
 - [x] 04-01: Trace Linux config and state file paths in the service
-- [ ] 04-02: Validate existing config loading against a user-provided sample
+- [x] 04-02: Validate existing config loading against a user-provided sample
 - [ ] 04-03: Preserve config/state separation across restart scenarios
 
 ### Phase 5: Docker Image and Config Mount
@@ -174,7 +174,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 1. Headless Build Boundary | 3/3 | Complete | 2026-05-14 |
 | 2. Arch Native Build | 3/3 | Complete | 2026-05-14 |
 | 3. Raspberry Pi Portability | 3/3 | Complete   | 2026-05-14 |
-| 4. Config Compatibility | 0/3 | Not started | - |
+| 4. Config Compatibility | 2/3 | In Progress | - |
 | 5. Docker Image and Config Mount | 0/3 | Not started | - |
 | 6. Containerized Daemon Runtime | 0/4 | Not started | - |
 | 7. TellStick Duo Hardware Verification | 0/4 | Not started | - |
