@@ -112,6 +112,20 @@ int main(int argc, char **argv) {
 		close(STDERR_FILENO);
 	}
 
+	/* Ensure state directory exists */
+	{
+		const char *stateDir = getenv("TELLDUS_STATE_DIR");
+		if (!stateDir) {
+			stateDir = VAR_CONFIG_PATH;
+		}
+		struct stat st;
+		if (stat(stateDir, &st) != 0) {
+			if (mkdir(stateDir, 0755) != 0 && errno != EEXIST) {
+				Log::warning("Failed to create state directory %s: %s", stateDir, strerror(errno));
+			}
+		}
+	}
+
 	/* Reduce our permissions (change user and group) */
 	if (getuid() == 0 || geteuid() == 0) {
 		Settings settings;
