@@ -121,6 +121,13 @@ None — no external service configuration required.
 - Ready for **04-02**: Validate existing config loading against a user-provided sample.
 - No blockers.
 
+## Self-Check: PASSED
+
+- All key files exist on disk: `telldus-core/service/CMakeLists.txt`, `SettingsConfuse.cpp`, `main_unix.cpp`, `04-01-SUMMARY.md`
+- All task commits verified in git history: `6977438`, `00f2eae`, `65ba25d`, `1f5f0bc`
+- Plan metadata commit verified: `58a34bd`
+- State/ROADMAP/REQUIREMENTS metadata commit verified: `64ecf56`
+
 ---
 *Phase: 04-config-compatibility*
 *Completed: 2026-05-15*

@@ -93,7 +93,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: Trace Linux config and state file paths in the service
+- [x] 04-01: Trace Linux config and state file paths in the service
 - [ ] 04-02: Validate existing config loading against a user-provided sample
 - [ ] 04-03: Preserve config/state separation across restart scenarios
 
