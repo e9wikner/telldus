@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 8 context gathered - operator documentation decisions captured
-last_updated: "2026-05-15T13:03:16.772Z"
+status: complete
+stopped_at: Phase 8 complete - all operator documentation delivered
+last_updated: "2026-05-15T15:30:00.000Z"
 last_activity: 2026-05-15
 progress:
   total_phases: 8
-  completed_phases: 7
-  total_plans: 23
-  completed_plans: 23
+  completed_phases: 8
+  total_plans: 26
+  completed_plans: 26
   percent: 100
 ---
 
@@ -21,16 +21,18 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-14)
 
 **Core value:** Existing 433 MHz devices controlled by a TellStick Duo must keep working on modern Linux, using the existing configuration file, without re-learning or re-pairing devices.
-**Current focus:** Phase 07 — TellStick Duo Hardware Verification
+**Current focus:** Phase 08 — Operator Documentation — COMPLETE
 
 ## Current Position
 
-Phase: 07 (TellStick Duo Hardware Verification) — COMPLETE
-Plan: 4 of 4 plans executed
-Status: All waves complete - hardware verification artifacts created
+Phase: 08 (Operator Documentation) — COMPLETE
+Plan: 3 of 3 plans executed
+Status: All documentation delivered - README.md, QUICKSTART.md, docs/REPOSITORY.md
 Last activity: 2026-05-15
 
 Progress: [██████████] 100%
+
+**Milestone v1.0 COMPLETE** — All 8 phases finished
 
 ## Performance Metrics
 
@@ -98,6 +100,13 @@ Recent decisions affecting current work:
 - 04-03: Used inline C helper calling tdAddDevice to test read-only stable config permission errors, since tdtool has no add-device command
 - 05-01: libconfuse2 (not libconfuse0) is the correct Debian bookworm runtime package name for libconfuse
 - [Phase 05-docker-image-and-config-mount]: Use separate if blocks for tdtool and tdadmin dispatch to satisfy exact-string-match security model — Separate if blocks make the dispatch logic explicit and auditable, aligning with the threat model's exact-string-match mitigation for T-05-02-01
+- 08-01: README.md sections follow exact order per D-08-05: Overview, Prerequisites, Docker Quickstart, Docker Operation, Native Build Arch, Native Build RPi, Configuration, Verification, Troubleshooting, What's Next
+- 08-01: Documentation references existing scripts rather than duplicating commands
+- 08-01: Clear statements about v1 exclusions (GUI, non-Linux, MQTT) present in README.md
+- 08-02: QUICKSTART.md is under 150 lines with copy-paste commands only
+- 08-02: QUICKSTART.md links to README.md for explanations and troubleshooting
+- 08-03: docs/REPOSITORY.md explains folder organization - user guides in README.md, protocol docs (*.dox) remain
+- 08-03: Verification checklist is discoverable via README.md and docs/REPOSITORY.md
 
 ### Pending Todos
 
@@ -121,9 +130,17 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-15T13:03:16.766Z
-Stopped at: Phase 8 context gathered - operator documentation decisions captured
-Resume: Phase 08 - Operator Documentation
+Last session: 2026-05-15T15:30:00.000Z
+Stopped at: Phase 8 complete - Milestone v1.0 delivered
+Status: All 8 phases complete — Project ready for release
+
+## Phase 08 Plans
+
+| Plan | Wave | Objective | Status |
+|------|------|-----------|--------|
+| 08-01 | 1 | Create comprehensive README.md documentation | ✓ Complete |
+| 08-02 | 1 | Create ultra-terse QUICKSTART.md | ✓ Complete |
+| 08-03 | 1 | Finalize Docker docs and consolidate docs/ folder | ✓ Complete |
 
 ## Phase 07 Plans
 
