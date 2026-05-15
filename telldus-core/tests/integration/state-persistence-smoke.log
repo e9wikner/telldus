@@ -1,0 +1,34 @@
+Initial tellstick.conf MD5: d9a159ab7ad2c4c112e01a0cea371796
+PASS: tellstick.conf MD5 unchanged after var config creation
+=== Starting telldusd ===
+telldusd daemon starting up
+Config auto-reload enabled for /tmp/tmp.iU4LweMyHu/tellstick.conf
+=== Listing devices (with pre-set ON state) ===
+type=device	id=1	name=Living room lamp	lastsentcommand=ON
+type=device	id=2	name=Bedroom dimmer	lastsentcommand=OFF
+type=device	id=3	name=Outdoor switch	lastsentcommand=OFF
+PASS: Device 1 is ON
+PASS: telldus-core.conf exists and contains state = 1
+=== Stopping daemon ===
+Received SIGTERM or SIGINT signal.
+Shutting down
+telldusd daemon exited
+=== Restarting daemon ===
+telldusd daemon starting up
+Config auto-reload enabled for /tmp/tmp.iU4LweMyHu/tellstick.conf
+=== Listing devices (after restart with OFF state) ===
+type=device	id=1	name=Living room lamp	lastsentcommand=OFF
+type=device	id=2	name=Bedroom dimmer	lastsentcommand=OFF
+type=device	id=3	name=Outdoor switch	lastsentcommand=OFF
+PASS: Device 1 is OFF after restart (state persisted)
+PASS: tellstick.conf MD5 unchanged after restart
+=== Testing read-only stable config ===
+-2
+PASS: Read-only stable config returns permission denied
+=== Testing read-only var config ===
+PASS: Daemon reads state from read-only var config without error
+
+=== ALL TESTS PASSED ===
+Received SIGTERM or SIGINT signal.
+Shutting down
+telldusd daemon exited

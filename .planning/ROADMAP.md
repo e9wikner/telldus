@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Config Compatibility** - Preserve existing `tellstick.conf` behavior and state separation (completed 2026-05-15)
 - [x] **Phase 5: Docker Image and Config Mount** - Build a minimal container image with `/etc/tellstick.conf` bind-mount support (completed 2026-05-15)
 - [x] **Phase 6: Containerized Daemon Runtime** - Run `telldusd` and `tdtool` in Docker with restart-safe behavior
-- [ ] **Phase 7: TellStick Duo Hardware Verification** - Validate USB detection, device commands, dimming, and receive paths
+- [x] **Phase 7: TellStick Duo Hardware Verification** - Validate USB detection, device commands, dimming, and receive paths (completed 2026-05-15)
 - [ ] **Phase 8: Operator Documentation** - Produce final native, Docker, and verification documentation
 
 ## Phase Details
@@ -138,15 +138,23 @@ Plans:
   1. Operator can connect a TellStick Duo and the daemon detects it over USB.
   2. Operator can list configured devices from the existing config.
   3. Operator can switch existing configured devices on and off.
-  4. Operator can dim configured devices that support dimming.
-  5. Operator can observe raw or sensor events where hardware and devices support receiving.
+  4. ~~Operator can dim configured devices that support dimming~~ - Deferred per D-07-08
+  5. ~~Operator can observe raw or sensor events where hardware and devices support receiving~~ - Deferred per D-07-04
+  6. Operator has a manual verification checklist for testing TellStick Duo behavior.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 07-01: Verify TellStick Duo USB detection natively and in Docker
-- [ ] 07-02: Verify configured device listing and on/off commands
-- [ ] 07-03: Verify dimming and receive/event behavior where available
-- [ ] 07-04: Write and execute the manual hardware verification checklist
+**Wave 1**
+- [x] 07-01-PLAN.md — Verify TellStick Duo USB detection with automated script (completed 2026-05-15)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [x] 07-02-PLAN.md — Verify configured device listing and on/off commands (completed 2026-05-15)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [x] 07-03-PLAN.md — Verify error paths and edge cases (completed 2026-05-15)
+
+**Wave 4** *(blocked on Waves 2-3 completion)*
+- [x] 07-04-PLAN.md — Create manual hardware verification checklist (completed 2026-05-15)
 
 ### Phase 8: Operator Documentation
 **Goal**: Native and Docker operation are reproducible on Arch Linux and Raspberry Pi OS/Debian.
@@ -177,5 +185,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 4. Config Compatibility | 3/3 | Complete | 2026-05-15 |
 | 5. Docker Image and Config Mount | 3/3 | Complete | 2026-05-15 |
 | 6. Containerized Daemon Runtime | 4/4 | Complete | 2026-05-15 |
-| 7. TellStick Duo Hardware Verification | 0/4 | Not started | - |
+| 7. TellStick Duo Hardware Verification | 4/4 | Complete | 2026-05-15 |
 | 8. Operator Documentation | 0/3 | Not started | - |

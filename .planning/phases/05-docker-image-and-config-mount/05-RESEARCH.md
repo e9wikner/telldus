@@ -396,22 +396,16 @@ exec telldusd --nodaemon "$@"
 | A3 | `--parallel 1` is sufficient to avoid QEMU segfaults for this codebase | Common Pitfalls #1 | If wrong, builds would still fail randomly under emulation; may need `--parallel 2` or environment-specific tuning |
 | A4 | `tini` is available in `debian:bookworm-slim` via `apt-get install tini` | Standard Stack | If wrong, need to download static binary from GitHub releases or use `dumb-init` instead |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Does the operator have a registry to push multi-arch images to?**
-   - What we know: `docker buildx --push` requires a registry. `--load` only supports single-platform.
-   - What's unclear: Whether DOCK-14 (single tag with multi-arch manifest) implies pushing to a registry or just building locally.
-   - Recommendation: `scripts/build-docker.sh` should support both `--load` (local, single-platform) and `--push` (registry, multi-platform) modes. Default to `--load` for local testing.
+1. **Does the operator have a registry to push multi-arch images to?** — **RESOLVED**
+    - Resolution: `scripts/build-docker.sh` supports both `--load` (local, single-platform) and `--push` (registry, multi-platform) modes. Default is `--load` for local testing.
 
-2. **Is `tdadmin` actually built by the headless preset?**
-   - What we know: CMakePresets.json sets `BUILD_TDADMIN=FALSE`.
-   - What's unclear: D-05-05 says image includes `tdadmin`, but the preset disables it.
-   - Recommendation: Either update the preset to `BUILD_TDADMIN=TRUE` or adjust D-05-05. `tdadmin` is small and may be useful for device admin in containers.
+2. **Is `tdadmin` actually built by the headless preset?** — **RESOLVED**
+    - Resolution: Plans update CMakePresets.json `BUILD_TDADMIN=TRUE` in the headless preset so `tdadmin` is built and included in the image per D-05-05.
 
-3. **Should the final stage use a non-root user?**
-   - What we know: `telldusd` drops privileges to the `user`/`group` from config when running as root.
-   - What's unclear: Whether running the container as root (and letting telldusd drop) vs running as a dedicated `telldus` user matters for USB device access.
-   - Recommendation: Run as root in the container for Phase 5; USB device passthrough permissions are handled in Phase 6. Document that the daemon internally drops to the configured user.
+3. **Should the final stage use a non-root user?** — **RESOLVED**
+    - Resolution: Run as root in the container for Phase 5. The daemon internally drops privileges per config. USB device passthrough permissions are deferred to Phase 6.
 
 ## Environment Availability
 

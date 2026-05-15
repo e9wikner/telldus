@@ -18,7 +18,7 @@ This phase does not implement containerized daemon runtime with USB passthrough 
 ### Dockerfile Build Strategy
 - **D-05-01:** Multi-stage Dockerfile. Build stage compiles inside `debian:bookworm-slim` (proven in Phase 3); final stage copies only runtime artifacts.
 - **D-05-02:** Deps-first, source-last layer caching. Install Debian packages and run CMake configure in early layers (cacheable), then `COPY` source and build in later layers. Source changes invalidate only the build layer, not dependency installation.
-- **D-05-03:** Final runtime stage uses a distroless or scratch base. The planner must handle shared library copying (libftdi1, libconfuse, and their dependencies) into the minimal final image.
+- **D-05-03:** Final runtime stage minimizes attack surface by using only runtime packages. Research determined true distroless/scratch is impractical due to the transitive shared library graph (libftdi1 → libusb-1.0 → libudev → libsystemd). The practical path is `debian:bookworm-slim` with only runtime `apt-get install` (no build tools, no headers).
 - **D-05-04:** CppUnit tests run during the build stage (`ctest -R cppunit`). The build fails if tests fail, ensuring only verified binaries reach the final image.
 
 ### Image Contents Boundary
