@@ -16,7 +16,7 @@ Requirements for the initial release. Each maps to roadmap phases.
 
 ### Docker Runtime
 
-- [ ] **DOCK-01**: Developer can build a Docker image that contains only the Linux headless runtime components and their required runtime dependencies
+- [x] **DOCK-01**: Developer can build a Docker image that contains only the Linux headless runtime components and their required runtime dependencies
 - [ ] **DOCK-02**: Operator can run `telldusd` in a container with a host TellStick Duo passed through to the container
 - [ ] **DOCK-03**: Operator can bind-mount an existing config file into the container as `/etc/tellstick.conf`
 - [ ] **DOCK-04**: Operator can use `tdtool` against the containerized daemon for device listing and command verification
@@ -90,7 +90,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NBLD-02 | Phase 2 | Pending |
 | NBLD-03 | Phase 3 | Complete |
 | NBLD-04 | Phase 2 | Pending |
-| DOCK-01 | Phase 5 | Pending |
+| DOCK-01 | Phase 5 | Complete |
 | DOCK-02 | Phase 6 | Pending |
 | DOCK-03 | Phase 5 | Pending |
 | DOCK-04 | Phase 6 | Pending |

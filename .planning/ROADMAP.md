@@ -109,9 +109,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: Add Docker build for headless runtime components
-- [ ] 05-02: Wire container entrypoint/config path behavior
-- [ ] 05-03: Validate config bind mount and image contents
+- [x] 05-01-PLAN.md — Add Docker build for headless runtime components
+- [ ] 05-02-PLAN.md — Wire container entrypoint/config path behavior
+- [ ] 05-03-PLAN.md — Validate config bind mount and image contents
 
 ### Phase 6: Containerized Daemon Runtime
 **Goal**: `telldusd` and `tdtool` work inside Docker with TellStick Duo passthrough and restart-safe behavior.
@@ -175,7 +175,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 2. Arch Native Build | 3/3 | Complete | 2026-05-14 |
 | 3. Raspberry Pi Portability | 3/3 | Complete   | 2026-05-14 |
 | 4. Config Compatibility | 3/3 | Complete | 2026-05-15 |
-| 5. Docker Image and Config Mount | 0/3 | Not started | - |
+| 5. Docker Image and Config Mount | 1/3 | In Progress | 2026-05-15 |
 | 6. Containerized Daemon Runtime | 0/4 | Not started | - |
 | 7. TellStick Duo Hardware Verification | 0/4 | Not started | - |
 | 8. Operator Documentation | 0/3 | Not started | - |
