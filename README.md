@@ -377,13 +377,16 @@ These features are planned for the next milestone:
 
 - **TelldusCenter/Qt GUI:** Not supported, headless only
 - **Windows/macOS/FreeBSD:** Linux-only in v1
+- **MQTT bridge:** Deferred to v2 milestone
+- **Home Assistant integration:** Deferred to v2 milestone
+- **Native packaging:** systemd service, APK/DEB packages deferred to v2
 - **Device pairing UI:** Use existing `tellstick.conf`
 
 ### Project Documentation
 
 - [PROJECT.md](.planning/PROJECT.md) - Full project context and decisions
 - [ROADMAP.md](.planning/ROADMAP.md) - Phase-by-phase roadmap
-- [docs/docker-runtime.md](docs/docker-runtime.md) - Detailed Docker runtime guide
+- [docs/REPOSITORY.md](docs/REPOSITORY.md) - Repository and docs folder organization
 - [docs/verification-checklist.md](docs/verification-checklist.md) - Hardware verification
 
 ---
