@@ -9,11 +9,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Build directory may be at repo root or under telldus-core/
 if [ -d "${SCRIPT_DIR}/../../../build/headless" ]; then
 	BUILD_DIR="$(cd "${SCRIPT_DIR}/../../../build/headless" && pwd)"
-	REPO_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
 else
 	BUILD_DIR="$(cd "${SCRIPT_DIR}/../../build/headless" && pwd)"
-	REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 fi
+REPO_ROOT="$(cd "${BUILD_DIR}/../.." && pwd)"
 DAEMON="${BUILD_DIR}/service/telldusd"
 TDTOOL="${BUILD_DIR}/tdtool/tdtool"
 SAMPLE_CONF="${SCRIPT_DIR}/sample-tellstick.conf"
