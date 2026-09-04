@@ -132,7 +132,7 @@ Items acknowledged and carried forward from previous milestone close:
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| MQTT | MQTT bridge and Home Assistant MQTT integration | Deferred to v2 | Initialization |
+| MQTT | MQTT bridge and Home Assistant MQTT integration | Delivered 38bd73fd (feat(mqtt): add MQTT bridge with Home Assistant discovery) | Initialization |
 | Packaging | Native distro packages and published multi-arch images | Deferred to v2 | Initialization |
 
 ## Session Continuity

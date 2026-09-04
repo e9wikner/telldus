@@ -6,3 +6,4 @@ latex/
 CMakeLists.txt.user
 *.pyc
 .local/
+cpptestresults.xml
