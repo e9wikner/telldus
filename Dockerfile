@@ -11,6 +11,7 @@ RUN apt-get update -qq && apt-get install -y -q \
 	libconfuse-dev \
 	libusb-1.0-0-dev \
 	libcppunit-dev \
+	libmosquitto-dev \
 	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
@@ -32,6 +33,7 @@ RUN apt-get update -qq && apt-get install -y -q --no-install-recommends \
 	libftdi1-2 \
 	libconfuse2 \
 	libusb-1.0-0 \
+	libmosquitto1 \
 	tini \
 	usbutils \
 	&& rm -rf /var/lib/apt/lists/*
@@ -41,6 +43,7 @@ COPY --from=build /build/build/headless/service/telldusd /usr/local/sbin/
 COPY --from=build /build/build/headless/client/libtelldus-core.so* /usr/local/lib/
 COPY --from=build /build/build/headless/tdtool/tdtool /usr/local/bin/
 COPY --from=build /build/build/headless/tdadmin/tdadmin /usr/local/bin/
+COPY --from=build /build/build/headless/mqtt/telldus-mqtt /usr/local/bin/
 
 # Copy sample config as fallback
 COPY telldus-core/service/tellstick.conf /etc/tellstick.conf

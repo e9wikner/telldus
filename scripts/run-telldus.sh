@@ -40,6 +40,24 @@
 #   devices across container restarts. Without this, state is lost when
 #   the container is removed.
 #
+# MQTT / HOME ASSISTANT BRIDGE (milestone v2):
+#   Set MQTT_BROKER_HOST to run the telldus-mqtt bridge instead of the plain
+#   daemon. Any other MQTT_* variable that is set gets forwarded into the
+#   container as-is (see MQTT-DESIGN.md for the full list). MQTT_RAW_EVENTS=1
+#   additionally publishes tdRegisterRawDeviceEvent frames to <prefix>/raw
+#   (non-retained), for debugging devices/sensors Telldus doesn't recognize.
+#   Example:
+#     CONFIG_PATH=/etc/tellstick.conf MQTT_BROKER_HOST=mqtt.lan \
+#       ./scripts/run-telldus.sh
+#
+# NOTE ABOUT DEVICE STATE (optimistic):
+#   433 MHz transmission is fire-and-forget: there is no acknowledgement
+#   from the physical device. The bridge's device/<id>/state topic reflects
+#   the last command *sent* (tdLastSentCommand), not a confirmed reading.
+#   A device toggled by its own physical remote will read wrong in MQTT/HA
+#   unless that remote is itself configured as a receiving device in
+#   tellstick.conf.
+#
 
 # CONFIGURATION
 # CONFIG_PATH should point to your existing tellstick.conf on the host.
@@ -55,6 +73,20 @@ if [ ! -f "$CONFIG_PATH" ]; then
     exit 1
 fi
 
+MQTT_ENV_ARGS=()
+COMMAND_ARGS=()
+if [ -n "$MQTT_BROKER_HOST" ]; then
+    echo "MQTT_BROKER_HOST is set: starting the telldus-mqtt bridge instead of the plain daemon."
+    for var in MQTT_BROKER_HOST MQTT_BROKER_PORT MQTT_USERNAME MQTT_PASSWORD \
+        MQTT_CLIENT_ID MQTT_TLS_CA MQTT_TOPIC_PREFIX MQTT_DISCOVERY_PREFIX \
+        MQTT_QOS MQTT_LOG_LEVEL MQTT_RAW_EVENTS; do
+        if [ -n "${!var}" ]; then
+            MQTT_ENV_ARGS+=(-e "${var}=${!var}")
+        fi
+    done
+    COMMAND_ARGS=(telldus-mqtt)
+fi
+
 echo "Starting Telldus daemon with config: $CONFIG_PATH"
 
 # Run the container with all required options
@@ -64,7 +96,9 @@ docker run -d \
     --restart unless-stopped \
     -v "${CONFIG_PATH}:/etc/tellstick.conf:ro" \
     -v telldus-state:/var/lib/telldus \
-    telldus:latest
+    "${MQTT_ENV_ARGS[@]}" \
+    telldus:latest \
+    "${COMMAND_ARGS[@]}"
 
 # Check if container started successfully
 if [ $? -eq 0 ]; then

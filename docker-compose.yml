@@ -21,18 +21,42 @@
 # USB Verification:
 #   docker-compose exec telldus lsusb | grep -i ftdi
 #
+# MQTT / Home Assistant bridge (milestone v2):
+#   To expose devices to Home Assistant over MQTT instead of (or alongside)
+#   `docker exec telldus tdtool`, uncomment `command: telldus-mqtt` and the
+#   MQTT_* environment block below, point MQTT_BROKER_HOST at your broker,
+#   then `docker-compose up -d`. telldusd keeps running in the same
+#   container (see scripts/docker-entrypoint.sh); tdtool still works via
+#   `docker-compose exec telldus tdtool --list`. Restart the container to
+#   pick up changes.
+#
 version: '3.8'
 
 services:
   telldus:
     image: telldus:latest
     container_name: telldus
+    # Uncomment to run the MQTT/Home Assistant bridge instead of the plain
+    # daemon. Leave commented for v1 tdtool-only operation (default).
+    # command: telldus-mqtt
     # --privileged is REQUIRED for TellStick Duo USB access (D-06-01)
     # Without this, libftdi1 cannot access /dev/ttyUSB* devices
     privileged: true
     # Auto-recovery from crashes and host reboots (D-06-10)
     # Stays down if manually stopped with 'docker-compose down'
     restart: unless-stopped
+    # environment:
+    #   MQTT_BROKER_HOST: mqtt.example.lan
+    #   MQTT_BROKER_PORT: "1883"
+    #   MQTT_USERNAME: ""
+    #   MQTT_PASSWORD: ""
+    #   MQTT_CLIENT_ID: telldus-mqtt
+    #   MQTT_TLS_CA: ""
+    #   MQTT_TOPIC_PREFIX: telldus
+    #   MQTT_DISCOVERY_PREFIX: homeassistant
+    #   MQTT_QOS: "1"
+    #   MQTT_LOG_LEVEL: ""
+    #   MQTT_RAW_EVENTS: ""
     volumes:
       # Host config file mounted read-only (D-06-03)
       # Replace /path/to/your/tellstick.conf with actual path on your host

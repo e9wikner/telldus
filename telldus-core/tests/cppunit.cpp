@@ -10,12 +10,18 @@
 
 #include "common/CommonTests.h"
 #include "service/ServiceTests.h"
+#ifdef TELLDUS_MQTT_TESTS
+#include "mqtt/MqttTests.h"
+#endif
 
 int main (int argc, char* argv[])
 {
 	// Setup our tests
 	CommonTests::setup();
 	ServiceTests::setup();
+#ifdef TELLDUS_MQTT_TESTS
+	MqttTests::setup();
+#endif
 
 	// informs test-listener about testresults
 	CPPUNIT_NS :: TestResult testresult;

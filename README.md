@@ -16,12 +16,13 @@ This project restores Telldus Core runtime on current Linux systems. The primary
 - Native builds for Arch Linux and Raspberry Pi OS/Debian
 - `tdtool` CLI for device control and verification
 - Full compatibility with existing `tellstick.conf` files
+- `telldus-mqtt` bridge with Home Assistant MQTT discovery (switches, lights,
+  covers, buttons, and sensors) — see [MQTT / Home Assistant Bridge](#mqtt--home-assistant-bridge)
 
-**What's deferred to v2:**
-- MQTT bridge and Home Assistant integration
-- TelldusCenter/Qt GUI (not supported in v1)
-- Windows, macOS, FreeBSD support (Linux-only in v1)
-- Native packaging (APK/DEB packages)
+**What's deferred beyond v2:**
+- TelldusCenter/Qt GUI (not supported)
+- Windows, macOS, FreeBSD support (Linux-only)
+- Native packaging (APK/DEB packages, systemd service)
 
 ---
 
@@ -270,6 +271,80 @@ The daemon watches `/etc/tellstick.conf` via inotify. Changes are applied automa
 
 ---
 
+## MQTT / Home Assistant Bridge
+
+`telldus-mqtt` is a second process that runs in the same container as
+`telldusd`. It publishes your configured devices and any sensors the Duo
+receives to MQTT with Home Assistant discovery, so they appear as HA
+entities automatically — `tdtool` keeps working unchanged alongside it.
+
+### Enabling it
+
+**Docker Compose:** uncomment `command: telldus-mqtt` and the `MQTT_*`
+environment block in `docker-compose.yml`, set `MQTT_BROKER_HOST`, then
+`docker-compose up -d`.
+
+**`run-telldus.sh`:** set `MQTT_BROKER_HOST` (and any other `MQTT_*`
+variables) before running the script — it switches from the plain daemon to
+the bridge automatically:
+
+```bash
+CONFIG_PATH=/etc/tellstick.conf MQTT_BROKER_HOST=mqtt.lan \
+  ./scripts/run-telldus.sh
+```
+
+### Configuration (environment variables)
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `MQTT_BROKER_HOST` | `localhost` | Also the switch that enables the bridge in `run-telldus.sh` |
+| `MQTT_BROKER_PORT` | `1883` | Broker port |
+| `MQTT_USERNAME` / `MQTT_PASSWORD` | *(none)* | Broker auth, if required |
+| `MQTT_CLIENT_ID` | `telldus-mqtt-<hostname>` | MQTT client ID |
+| `MQTT_TLS_CA` | *(none)* | Path to a CA bundle, to connect over TLS |
+| `MQTT_TOPIC_PREFIX` | `telldus` | State/command topic prefix |
+| `MQTT_DISCOVERY_PREFIX` | `homeassistant` | HA discovery topic prefix |
+| `MQTT_QOS` | `1` | QoS for publishes/subscribes |
+| `MQTT_LOG_LEVEL` | *(none)* | Set to `debug` for verbose logging |
+| `MQTT_RAW_EVENTS` | `0` | Set to `1`/`true` to publish `<prefix>/raw` (non-retained), for debugging unrecognized frames |
+
+### Topic scheme
+
+```
+telldus/bridge/status                              online | offline   (retained, LWT)
+telldus/device/<id>/state                          ON | OFF           (retained)
+telldus/device/<id>/brightness                     0-255              (retained, dimmers)
+telldus/device/<id>/set                            ON | OFF | TOGGLE  (subscribed)
+telldus/device/<id>/brightness/set                 0-255              (subscribed)
+telldus/device/<id>/cover/set                       OPEN|CLOSE|STOP    (subscribed)
+telldus/sensor/<protocol>/<model>/<id>/<datatype>  numeric value      (retained)
+```
+
+Devices (switches, dimmers, covers, buttons — from your `tellstick.conf`)
+publish discovery and state at startup. Sensors are **runtime-discovered
+only**: they are never in `tellstick.conf`, so a sensor's discovery and
+state topics appear the first time the Duo receives a packet from it.
+Discovery and retained state are republished on every broker reconnect.
+
+### Device state is optimistic
+
+433 MHz transmission is fire-and-forget — there is no acknowledgement from
+the physical device. `telldus/device/<id>/state` reflects the last command
+the bridge (or `tdtool`, or anything else) **sent**, via
+`tdLastSentCommand`, not a confirmed reading. If a device is also switched
+by its original physical remote, MQTT/HA will read the wrong state unless
+that remote is itself configured as a receiving device in `tellstick.conf`.
+Sensor readings, by contrast, are genuine received values.
+
+### Pairing is not exposed
+
+The bridge never calls `tdSetName`, `tdAddDevice`, `tdRemoveDevice`, or
+`tdLearn` — device IDs and pairing come entirely from your existing
+`tellstick.conf` and are never written back. Re-pairing from Home Assistant
+is intentionally not possible.
+
+---
+
 ## Verification
 
 See [docs/verification-checklist.md](docs/verification-checklist.md) for the complete hardware verification checklist.
@@ -365,27 +440,26 @@ docker logs telldus
 
 ## What's Next
 
-### v2 Roadmap
+### Delivered in v2
 
-These features are planned for the next milestone:
+- **MQTT bridge:** `telldus-mqtt` with Home Assistant MQTT discovery for
+  devices and sensors — see [MQTT / Home Assistant Bridge](#mqtt--home-assistant-bridge)
 
-- **MQTT bridge:** Home Assistant MQTT discovery integration
-- **Native packaging:** systemd service, APK/DEB packages
-- **Multi-arch images:** Published images for amd64/arm64
-
-### Not in v1
+### Not yet available
 
 - **TelldusCenter/Qt GUI:** Not supported, headless only
-- **Windows/macOS/FreeBSD:** Linux-only in v1
-- **MQTT bridge:** Deferred to v2 milestone
-- **Home Assistant integration:** Deferred to v2 milestone
-- **Native packaging:** systemd service, APK/DEB packages deferred to v2
+- **Windows/macOS/FreeBSD:** Linux-only
+- **Native packaging:** systemd service, APK/DEB packages
+- **Multi-arch published images:** build locally for amd64/arm64 for now
 - **Device pairing UI:** Use existing `tellstick.conf`
+- **Scenes over MQTT:** `TELLSTICK_TYPE_SCENE` is not exposed as an HA entity (groups are, as switches)
+- **Re-pairing over MQTT:** `tdLearn` is intentionally not exposed
 
 ### Project Documentation
 
 - [PROJECT.md](.planning/PROJECT.md) - Full project context and decisions
 - [ROADMAP.md](.planning/ROADMAP.md) - Phase-by-phase roadmap
+- [MQTT-DESIGN.md](.planning/MQTT-DESIGN.md) - MQTT bridge design (milestone v2)
 - [docs/REPOSITORY.md](docs/REPOSITORY.md) - Repository and docs folder organization
 - [docs/verification-checklist.md](docs/verification-checklist.md) - Hardware verification
 

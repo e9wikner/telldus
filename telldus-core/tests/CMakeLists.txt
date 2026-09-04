@@ -39,6 +39,13 @@ IF(ENABLE_TESTING)
 	TARGET_LINK_LIBRARIES(TestRunner cppunit TelldusCommonTests TelldusServiceTests)
 	ADD_DEPENDENCIES(TestRunner TelldusCommonTests TelldusServiceTests)
 
+	IF(BUILD_MQTT)
+		ADD_SUBDIRECTORY(mqtt)
+		TARGET_LINK_LIBRARIES(TestRunner TelldusMqttTests)
+		ADD_DEPENDENCIES(TestRunner TelldusMqttTests)
+		TARGET_COMPILE_DEFINITIONS(TestRunner PRIVATE TELLDUS_MQTT_TESTS)
+	ENDIF(BUILD_MQTT)
+
 	# Style/static analysis tests disabled for headless CI — see Phase 2 Plan 3
 	# ADD_SOURCES(TelldusCommon ${CMAKE_SOURCE_DIR}/common)
 	# ADD_SOURCES(${telldus-core_TARGET} ${CMAKE_SOURCE_DIR}/client)

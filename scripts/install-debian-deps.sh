@@ -17,6 +17,7 @@ apt-get install -y -q \
 	libconfuse-dev \
 	libusb-1.0-0-dev \
 	libcppunit-dev \
+	libmosquitto-dev \
 || {
 	echo "Warning: Some packages may have failed to install. Please review the output above."
 	exit 1

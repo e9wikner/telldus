@@ -13,6 +13,7 @@ sudo pacman -S --needed --noconfirm \
 	libusb-compat \
 	pkg-config \
 	cppunit \
+	mosquitto \
 || {
 	echo "Warning: Some packages may have failed to install. Please review the output above."
 	exit 1

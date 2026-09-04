@@ -1,8 +1,9 @@
 # TellStick Duo Hardware Verification Checklist
 
-**Phase 7: TellStick Duo Hardware Verification**  
-**Version:** 1.0  
-**Date:** 2026-05-15
+**Phase 7: TellStick Duo Hardware Verification**
+**Phase 14: MQTT Bridge Hardware Verification and Operator Documentation** (Tests 8-11)
+**Version:** 1.1
+**Date:** 2026-09-04
 
 ---
 
@@ -294,6 +295,123 @@ echo "Exit code: $?"
 
 ---
 
+## Test 8: MQTT Bridge Startup and Discovery (Phase 14)
+
+**Objective:** Confirm `telldus-mqtt` connects and publishes Home Assistant discovery
+
+**Prerequisites:**
+- A reachable MQTT broker (and a Home Assistant instance subscribed to the discovery prefix, if verifying HA end-to-end)
+- Container running with `MQTT_BROKER_HOST` set (see [QUICKSTART.md](../QUICKSTART.md#mqtt--home-assistant-bridge))
+
+**Steps:**
+
+1. Start (or restart) the container in bridge mode, then check logs:
+   ```bash
+   docker logs telldus --tail 30
+   ```
+2. Subscribe to everything the bridge publishes:
+   ```bash
+   mosquitto_sub -h <broker> -t 'telldus/#' -v &
+   mosquitto_sub -h <broker> -t 'homeassistant/+/telldus/+/config' -v
+   ```
+3. In Home Assistant (if available), check Settings → Devices & Services → MQTT for the new entities.
+
+**Expected Results:**
+- `telldus/bridge/status` is retained `online`
+- One retained discovery payload (`homeassistant/<component>/telldus/<id>/config`) per configured device, matching the component table in [MQTT-DESIGN.md](../.planning/MQTT-DESIGN.md)
+- Entities appear in HA, grouped by device with correct name/manufacturer/model
+
+**Pass Criteria:**
+- [ ] `telldus/bridge/status` = `online`
+- [ ] Discovery payload present for every configured device
+- [ ] Entities visible in Home Assistant (if HA available)
+
+---
+
+## Test 9: Device Command via MQTT (Phase 14)
+
+**Objective:** Confirm a command sent over MQTT actuates the real device and updates retained state
+
+**Steps:**
+
+1. Publish a command (replace `<id>` with a real device ID):
+   ```bash
+   mosquitto_pub -h <broker> -t 'telldus/device/<id>/set' -m 'ON'
+   ```
+2. Confirm the physical device responded, then check both the retained MQTT
+   state and `tdtool` agree:
+   ```bash
+   mosquitto_sub -h <broker> -t 'telldus/device/<id>/state' -C 1
+   docker exec telldus tdtool --list
+   ```
+
+**Expected Results:**
+- Physical device turns on
+- `telldus/device/<id>/state` reads `ON`
+- `tdtool --list` shows the same last-sent state
+
+**Pass Criteria:**
+- [ ] Physical device actuated
+- [ ] MQTT retained state matches `tdtool --list`
+
+---
+
+## Test 10: Sensor Events via MQTT (Phase 14, gated on Phase 9)
+
+**Objective:** Confirm a received sensor reading is published with correct discovery
+
+**Prerequisites:** Phase 9 established the Duo receives sensor packets. Skip
+this test (mark N/A) if Phase 9 found no receivable sensors in this
+deployment.
+
+**Steps:**
+
+1. Wait for a sensor transmission (temperature/humidity sensors typically
+   transmit every 30-90 seconds), watching:
+   ```bash
+   mosquitto_sub -h <broker> -t 'telldus/sensor/#' -v
+   ```
+2. Confirm a matching discovery payload appeared at
+   `homeassistant/sensor/telldus/<protocol>_<model>_<id>_<datatype>/config`.
+
+**Expected Results:**
+- A retained value appears at `telldus/sensor/<protocol>/<model>/<id>/<datatype>`
+- A matching HA discovery payload appeared on first sighting, with the
+  correct `device_class`/`unit_of_measurement` for that datatype
+
+**Pass Criteria:**
+- [ ] Sensor state topic received a value
+- [ ] Discovery payload present with correct unit/device_class
+- [ ] N/A — no receivable sensors in this deployment (per Phase 9)
+
+---
+
+## Test 11: Restart Matrix — Retained State and LWT (Phase 14)
+
+**Objective:** Confirm retained state and the Last Will survive real restarts
+
+**Steps:**
+
+1. **Bridge container restart:** `docker restart telldus`, then confirm
+   `telldus/bridge/status` goes `offline` (LWT or clean shutdown publish)
+   then back to `online`, and discovery/state are republished.
+2. **Broker restart:** restart the MQTT broker, then confirm the bridge
+   reconnects on its own (`mosquitto_reconnect_delay_set` backoff) and
+   republishes discovery + state without a container restart.
+3. **Home Assistant restart:** restart HA, then confirm entities reappear
+   without manual intervention (HA re-subscribes and reads retained state).
+
+⚠️ Broker and HA restarts affect every other client on that broker/HA
+instance — coordinate with whoever else depends on them before running this
+step outside a dedicated test environment.
+
+**Pass Criteria:**
+- [ ] Bridge container restart: status flips offline → online, discovery/state republished
+- [ ] Broker restart: bridge reconnects unattended, discovery/state republished
+- [ ] HA restart: entities reappear without manual reconfiguration
+
+---
+
 ## Sign-Off
 
 I have completed the hardware verification checklist and confirm:
@@ -309,7 +427,9 @@ I have completed the hardware verification checklist and confirm:
 **Host OS:** _________________________________  
 **Docker Version:** _________________________________  
 **TellStick Duo:** ☐ Connected  ☐ Not Available  
-**Hardware Location:** ☐ Native Arch  ☐ Raspberry Pi  ☐ Other: _______
+**Hardware Location:** ☐ Native Arch  ☐ Raspberry Pi  ☐ Other: _______  
+**MQTT Broker:** ☐ Available  ☐ Not Available  
+**Home Assistant:** ☐ Available  ☐ Not Available
 
 ### Test Results
 
@@ -322,6 +442,10 @@ I have completed the hardware verification checklist and confirm:
 | 5 | Off Command (DUO-04) | ☐ PASS ☐ FAIL ☐ N/A | |
 | 6 | Automated Verification | ☐ PASS ☐ FAIL ☐ N/A | |
 | 7 | Error Path Verification | ☐ PASS ☐ FAIL ☐ N/A | Optional |
+| 8 | MQTT Bridge Startup and Discovery | ☐ PASS ☐ FAIL ☐ N/A | |
+| 9 | Device Command via MQTT | ☐ PASS ☐ FAIL ☐ N/A | Device ID: ___ |
+| 10 | Sensor Events via MQTT | ☐ PASS ☐ FAIL ☐ N/A | Gated on Phase 9 |
+| 11 | Restart Matrix (Retained State/LWT) | ☐ PASS ☐ FAIL ☐ N/A | |
 
 ### Overall Status
 
@@ -447,3 +571,4 @@ docker exec telldus pgrep telldusd
 - [Docker Runtime Guide](./docker-runtime.md) - Container setup and management
 - [Phase 7 Research](../.planning/phases/07-tellstick-duo-hardware-verification/07-RESEARCH.md) - Technical details
 - [Phase 7 Context](../.planning/phases/07-tellstick-duo-hardware-verification/07-CONTEXT.md) - Implementation decisions
+- [MQTT-DESIGN.md](../.planning/MQTT-DESIGN.md) - MQTT bridge design, topic scheme, and Phase 8-14 breakdown

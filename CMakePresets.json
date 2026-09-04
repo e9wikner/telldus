@@ -10,6 +10,7 @@
 				"FORCE_COMPILE_FROM_TRUNK": "TRUE",
 				"BUILD_TDTOOL": "TRUE",
 				"BUILD_TDADMIN": "TRUE",
+				"BUILD_MQTT": "TRUE",
 				"ENABLE_TESTING": "TRUE",
 				"FTDI_ENGINE": "libftdi"
 			}

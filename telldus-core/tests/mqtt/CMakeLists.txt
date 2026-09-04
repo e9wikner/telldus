@@ -1,0 +1,8 @@
+FILE(GLOB SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*Test.cpp" )
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
+
+ADD_LIBRARY(TelldusMqttTests STATIC ${SRCS} )
+
+TARGET_LINK_LIBRARIES( TelldusMqttTests ${telldus-mqtt-core_TARGET} ${CPPUNIT} )
+ADD_DEPENDENCIES( TelldusMqttTests ${telldus-mqtt-core_TARGET} )

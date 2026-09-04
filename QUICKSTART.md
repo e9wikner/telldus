@@ -38,6 +38,36 @@ docker-compose exec telldus tdtool --list
 
 ---
 
+## MQTT / Home Assistant Bridge
+
+```bash
+# With the helper script — set MQTT_BROKER_HOST to switch it on
+CONFIG_PATH=/path/to/your/tellstick.conf MQTT_BROKER_HOST=mqtt.lan \
+  ./scripts/run-telldus.sh
+
+# Or run manually
+docker run -d \
+  --name telldus \
+  --privileged \
+  --restart unless-stopped \
+  -v /path/to/your/tellstick.conf:/etc/tellstick.conf:ro \
+  -v telldus-state:/var/lib/telldus \
+  -e MQTT_BROKER_HOST=mqtt.lan \
+  -e MQTT_USERNAME=youruser \
+  -e MQTT_PASSWORD=yourpass \
+  telldus:latest telldus-mqtt
+
+# Verify: devices/sensors publish under telldus/... and
+# homeassistant/.../telldus/.../config — tdtool still works unchanged
+docker exec telldus tdtool --list
+mosquitto_sub -h mqtt.lan -t 'telldus/#' -v
+```
+
+See [README.md](README.md#mqtt--home-assistant-bridge) for the full
+environment variable list and topic scheme.
+
+---
+
 ## Native Build - Arch Linux
 
 ```bash
