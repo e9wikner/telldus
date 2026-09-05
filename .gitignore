@@ -7,3 +7,9 @@ CMakeLists.txt.user
 *.pyc
 .local/
 cpptestresults.xml
+
+# Host-specific deployment values (deploy/README.md): the broker password and
+# the household's device pairing. Created from the .example files on the
+# deployment host; there is no copy in git, so do not delete them.
+deploy/deploy.env
+deploy/tellstick.conf

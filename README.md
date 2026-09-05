@@ -34,6 +34,7 @@ This project restores Telldus Core runtime on current Linux systems. The primary
 
 ### Software (choose one path)
 - **Docker:** Docker 20.10+ with Docker Compose
+- **Rootless Podman:** Podman 4+ (see [Rootless Podman quadlet](#rootless-podman-quadlet-hubbabubba))
 - **Native Arch Linux:** `pacman`, `cmake`, `gcc`
 - **Native Raspberry Pi OS/Debian:** `apt`, `cmake`, `build-essential`
 
@@ -58,6 +59,30 @@ docker exec telldus tdtool --list
 ```
 
 See [Docker Operation](#docker-operation) for detailed usage and [Verification](#verification) for testing.
+
+---
+
+## Rootless Podman quadlet (hubbabubba)
+
+A fourth deployment path, alongside Docker and the two native builds: a
+rootless Podman quadlet running as a `systemd --user` unit, with no root
+daemon, no `docker` group, and no `--privileged`. It is what runs on the
+`hubbabubba` home server, deployed from a checkout of this repo on that host:
+
+```bash
+cd ~/Development/telldus
+cp deploy/deploy.env.example deploy/deploy.env          # broker credentials
+cp deploy/tellstick.conf.example deploy/tellstick.conf  # device pairing
+deploy/deploy.sh
+```
+
+`deploy/deploy.sh` builds the image, renders the quadlet, and manages the
+unit. It uses no `sudo` — the USB access that Docker gets from `--privileged`
+comes instead from a udev ACL on the TellStick's node plus a user-namespace
+mapping that keeps `nobody` on the deploying account's own uid.
+
+See [deploy/README.md](deploy/README.md) for what the host has to provide,
+the deploy/rollback loop, and verification.
 
 ---
 
