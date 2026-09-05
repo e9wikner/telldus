@@ -99,6 +99,13 @@ fi
      Copy it from the example and fill in this host's values:
        cp ${deploy_dir}/deploy.env.example ${env_file}"
 
+# 0600 before reading, not after: this file holds the broker password, and a
+# `cp` from the example leaves it at the ambient umask (usually 0644). It is
+# also what makes hubbabubba's backup exclusion for `**/deploy.env` correct
+# rather than merely cautious — an unreadable file that is NOT excluded makes
+# the offsite Syncthing tier park a permanent folder error.
+chmod 0600 "${env_file}"
+
 # shellcheck source=/dev/null
 source "${env_file}"
 

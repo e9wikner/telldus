@@ -35,6 +35,14 @@ the deployment host, which is also where you edit them — `deploy.sh` copies
 `tellstick.conf` onto the host, so the checkout stays the source of truth
 rather than becoming a stale copy of it.
 
+They are backed up differently, and it matters. `tellstick.conf` is not a
+secret and *is* backed up by both of hubbabubba's tiers — it is the one file
+here that cannot be regenerated, since losing house/unit codes means
+re-pairing every physical switch by hand. `deploy.env` holds a password and
+is *excluded* from both tiers rather than mirrored offsite, so it is the only
+copy; `deploy.sh` keeps it at 0600. Losing it costs a new broker password and
+a re-deploy of this stack and `e9wikner/homeass`, nothing more.
+
 ## What the host has to provide
 
 `deploy.sh` refuses to run until these hold, and says which one failed. On
