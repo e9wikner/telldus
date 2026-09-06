@@ -13,6 +13,9 @@
 #
 # The controller serial is in the container's own startup log:
 #     journalctl --user -u telldus.service | grep serial
+#
+# The CHANGE_ME values below are placeholders, not a real pairing — deploy.sh
+# refuses to run until every one of them is replaced.
 
 # telldusd drops to this account after startup — see the quadlet's
 # UserNS=keep-id:uid=65534,gid=65534 comment for why that matters.
@@ -28,7 +31,7 @@ device {
   protocol = "arctech"
   model = "selflearning-switch"
   parameters {
-    house = "312538"
+    house = "CHANGE_ME"
     unit = "1"
   }
 }

@@ -45,18 +45,20 @@ a re-deploy of this stack and `e9wikner/homeass`, nothing more.
 
 ## What the host has to provide
 
-`deploy.sh` refuses to run until these hold, and says which one failed. On
-hubbabubba every one of them is applied by that repo's `podman` role
-(`python scripts/install.py --tags podman`).
+`deploy.sh` checks the ones it can and names the check that failed; the rest
+surface a little later, at image build or container start, with an error that
+still points here. On hubbabubba every one of them is applied by that repo's
+`podman` role (`python scripts/install.py --tags podman`).
 
-| Requirement | Why |
-|---|---|
-| `podman`, plus `netavark`/`aardvark-dns`/`passt`/`catatonit`/`fuse-overlayfs` | The rootless container engine and its network and storage helpers. |
-| A subordinate UID/GID range for the deploying account in `/etc/subuid` and `/etc/subgid` | Rootless Podman builds its user namespace from these; they must exist before the first image is built. |
-| `loginctl enable-linger <account>` | Without it `/run/user/<uid>` and the session bus only exist while the account is logged in, and the unit would die with the SSH session that started it. |
-| A directory at `APPDATA_ROOT` the account can create subdirectories in | Where `tellstick.conf` and the daemon's state live. On hubbabubba it is `/srv/appdata`, a Btrfs subvolume that Snapper snapshots and the backup engine mirrors locally and offsite. |
-| A udev rule granting the account `rw` on the TellStick's USB node | The quadlet bind-mounts the whole `/dev/bus/usb` tree so libusb can find the device at whatever devnum it currently has; the ACL is what makes that one node writable to an unprivileged account. hubbabubba declares it as `podman_device_acls` in host_vars, matched on `1781:0c31`. |
-| A running MQTT broker | Deployed separately by `e9wikner/homeass`, with `Network=host`, so the bridge reaches it at `127.0.0.1:1883`. |
+| Requirement | Checked by `deploy.sh`? | Why |
+|---|---|---|
+| `podman` on `PATH` | yes | The rootless container engine. |
+| `netavark`/`aardvark-dns`/`passt`/`catatonit`/`fuse-overlayfs` | no — fails at container start | Its network and storage helpers. |
+| A subordinate UID/GID range for the deploying account in `/etc/subuid` and `/etc/subgid` | yes | Rootless Podman builds its user namespace from these; they must exist before the first image is built. |
+| `loginctl enable-linger <account>` | yes | Without it `/run/user/<uid>` and the session bus only exist while the account is logged in, and the unit would die with the SSH session that started it. |
+| A directory at `APPDATA_ROOT` the account can create subdirectories in | yes (existence; not that it is a mount) | Where `tellstick.conf` and the daemon's state live. On hubbabubba it is `/srv/appdata`, a Btrfs subvolume that Snapper snapshots and the backup engine mirrors locally and offsite. |
+| A udev rule granting the account `rw` on the TellStick's USB node | no — fails as a runtime `Permission denied` (`tdtool --on`, not `--list`) | The quadlet bind-mounts the whole `/dev/bus/usb` tree so libusb can find the device at whatever devnum it currently has; the ACL is what makes that one node writable to an unprivileged account. hubbabubba declares it as `podman_device_acls` in host_vars, matched on `1781:0c31`. |
+| A running MQTT broker | no — the bridge logs an auth/connection error and retries | Deployed separately by `e9wikner/homeass`, with `Network=host`, so the bridge reaches it at `127.0.0.1:1883`. |
 
 ## First deployment
 

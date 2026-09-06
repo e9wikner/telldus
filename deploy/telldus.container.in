@@ -39,9 +39,15 @@
 # quadlet directory. deploy.sh writes the env file 0600 under the appdata
 # root instead; Podman reads it on the host, as the deploying account,
 # before the container starts.
+#
+# After/Wants mqtt.service, and no network-online.target - this runs as a
+# `systemd --user` unit, where network-online.target is never pulled in and
+# ordering against it is inert. It does not matter here anyway: Network=host
+# means the container uses the host's already-up networking, and Restart=always
+# covers the broker not being ready on the first attempt.
 [Unit]
 Description=Telldus MQTT bridge
-After=network-online.target mqtt.service
+After=mqtt.service
 Wants=mqtt.service
 
 [Container]

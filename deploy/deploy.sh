@@ -58,6 +58,18 @@ done
 
 command -v podman >/dev/null 2>&1 || die "podman is not installed on this host."
 
+# Rootless Podman builds its user namespace from a subordinate ID range for
+# this account; without one the first `podman build` fails deep in the
+# runtime with an opaque error. The network/storage helpers (netavark, passt,
+# fuse-overlayfs, …) and the udev device ACL are NOT checked here — the
+# helpers surface at container start and the ACL as a runtime `Permission
+# denied` on the device (deploy/README.md lists all of them).
+grep -q "^${USER}:" /etc/subuid 2>/dev/null && grep -q "^${USER}:" /etc/subgid 2>/dev/null || die \
+  "no subordinate UID/GID range for ${USER} in /etc/subuid / /etc/subgid.
+     Rootless Podman needs one before the first image build. Fix on the host,
+     as an account with sudo: usermod --add-subuids 200000-265535 \\
+     --add-subgids 200000-265535 ${USER}"
+
 # Without lingering, /run/user/<uid> and its D-Bus session only exist while
 # this account is logged in, so the unit below would die with the SSH session
 # that started it.
@@ -123,9 +135,11 @@ done
        cp ${deploy_dir}/tellstick.conf.example ${conf_file}"
 
 if grep -q 'CHANGE_ME' "${conf_file}"; then
-  die "${conf_file} still contains CHANGE_ME — the controller serial was never filled in.
-     Find it in the container's startup log:
-       journalctl --user -u telldus.service | grep serial"
+  die "${conf_file} still contains CHANGE_ME — a placeholder from the example was
+     never filled in (the house code, the controller serial, or both).
+     House/unit codes come from physically pairing each switch
+     (\`podman exec telldus tdtool --learn <id>\`); the serial is in the
+     container's startup log (\`journalctl --user -u telldus.service | grep serial\`)."
 fi
 
 appdata="${APPDATA_ROOT}/telldus"
@@ -241,9 +255,12 @@ render "${deploy_dir}/telldus.container.in" \
 # both, unconditionally, rather than trying to work out what changed.
 # tellstick.conf is the exception: telldusd hot-reloads it via inotify, so a
 # pairing-only change would not have needed the restart.
+#
+# No `systemctl --user enable`: the quadlet's `[Install] WantedBy=` is what
+# the generator acts on for boot start, and `enable` on a generator unit has
+# no file to link and just errors.
 step "Reloading and restarting the unit"
 systemctl --user daemon-reload
-systemctl --user enable telldus.service >/dev/null 2>&1 || true
 systemctl --user restart telldus.service
 
 step "Status"
@@ -257,4 +274,9 @@ Deployed.
   journalctl --user -u telldus.service -f
   mosquitto_sub -h ${MQTT_BROKER_HOST} -t '${MQTT_TOPIC_PREFIX}/#' -v \\
     -u ${MQTT_USERNAME} -P "\$MQTT_PASSWORD"
+
+If the bridge logs an authentication failure, MQTT_PASSWORD here has drifted
+from the broker password in e9wikner/homeass's deploy.env — nothing enforces
+that they match. The mosquitto_sub above uses the same credentials and is the
+quickest way to tell which side is wrong.
 EOF
