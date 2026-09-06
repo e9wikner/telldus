@@ -1,0 +1,68 @@
+# telldusd + the telldus-mqtt bridge — rootless Podman quadlet.
+#
+# Rendered by deploy/deploy.sh into
+# ~/.config/containers/systemd/telldus.container on the target host,
+# substituting the @TOKEN@ placeholders below from deploy/deploy.env. Edit
+# THIS file, not the rendered one — the next deploy overwrites it.
+#
+# This is the hubbabubba deployment specifically (see deploy/README.md). The
+# generic Docker and native paths documented in the top-level README are
+# unaffected by anything in this directory.
+#
+# Network=host - the bridge has to reach the Mosquitto broker, which is
+# deployed separately (e9wikner/homeass) and also runs with Network=host.
+# Host networking is what lets two independently deployed projects share a
+# broker over 127.0.0.1 without a Podman network in common.
+#
+# UserNS=keep-id:uid=65534,gid=65534 - telldusd drops privilege to `nobody`
+# (tellstick.conf's own `user = "nobody"` directive) after startup, and
+# `nobody` is uid/gid 65534 in this image. Without this mapping only the
+# brief root phase before that drop lands on the deploying account's own host
+# uid — rootless Podman maps uid 0 that way automatically — while every other
+# uid, 65534 included, falls into a subuid the host's device ACL does not
+# cover. Confirmed the hard way: without it `tdtool --list` still worked (it
+# only queries telldusd's in-memory config over a local socket, no device
+# I/O), but `tdtool --on`/`--off` failed with "TellStick not found", because
+# the process that actually opens /dev/bus/usb could not get past the ACL.
+#
+# Volume=/dev/bus/usb, not AddDevice - the TellStick Duo enumerates as a raw
+# USB device with no stable node path: its devnum changes on every
+# unplug/replug, so pinning one AddDevice=/dev/bus/usb/NNN/MMM would work
+# until the next replug and then silently break. Bind-mounting the bus tree
+# lets libusb enumerate and reach the device under whatever number it
+# currently has, exactly as it does on the host. The udev ACL is what makes
+# that one node writable to the deploying account — not every other device on
+# the bus that also becomes visible this way.
+#
+# EnvironmentFile, not Environment= lines - the broker password would
+# otherwise sit in this file, which lives world-readable-in-principle in the
+# quadlet directory. deploy.sh writes the env file 0600 under the appdata
+# root instead; Podman reads it on the host, as the deploying account,
+# before the container starts.
+#
+# After/Wants mqtt.service, and no network-online.target - this runs as a
+# `systemd --user` unit, where network-online.target is never pulled in and
+# ordering against it is inert. It does not matter here anyway: Network=host
+# means the container uses the host's already-up networking, and Restart=always
+# covers the broker not being ready on the first attempt.
+[Unit]
+Description=Telldus MQTT bridge
+After=mqtt.service
+Wants=mqtt.service
+
+[Container]
+Image=telldus:latest
+ContainerName=telldus
+Exec=telldus-mqtt
+Network=host
+UserNS=keep-id:uid=65534,gid=65534
+Volume=/dev/bus/usb:/dev/bus/usb
+Volume=@APPDATA_ROOT@/telldus/tellstick.conf:/etc/tellstick.conf:ro
+Volume=@APPDATA_ROOT@/telldus/state:/var/lib/telldus:Z
+EnvironmentFile=@APPDATA_ROOT@/telldus/mqtt.env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

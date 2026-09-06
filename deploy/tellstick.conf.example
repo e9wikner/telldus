@@ -1,0 +1,43 @@
+# TellStick device pairing — copy to deploy/tellstick.conf and edit.
+#
+# deploy/tellstick.conf is gitignored: house and unit codes are a household's
+# own, and this is a public fork. It is the source of truth for the
+# deployment, though — deploy.sh copies it to <APPDATA_ROOT>/telldus/
+# tellstick.conf, so keep it in the checkout rather than editing the copy
+# under appdata. telldusd hot-reloads the file via inotify, so a re-deploy
+# needs no container restart for a pairing change.
+#
+# house/unit are assigned during physical pairing: hold the switch's button
+# while running
+#     podman exec telldus tdtool --learn <device_id>
+#
+# The controller serial is in the container's own startup log:
+#     journalctl --user -u telldus.service | grep serial
+#
+# The CHANGE_ME values below are placeholders, not a real pairing — deploy.sh
+# refuses to run until every one of them is replaced.
+
+# telldusd drops to this account after startup — see the quadlet's
+# UserNS=keep-id:uid=65534,gid=65534 comment for why that matters.
+user = "nobody"
+group = "plugdev"
+deviceNode = "/dev/tellstick"
+ignoreControllerConfirmation = "false"
+
+device {
+  id = 1
+  name = "Example switch"
+  controller = 1
+  protocol = "arctech"
+  model = "selflearning-switch"
+  parameters {
+    house = "CHANGE_ME"
+    unit = "1"
+  }
+}
+
+controller {
+  id = 1
+  type = 2
+  serial = "CHANGE_ME"
+}
